@@ -1,0 +1,25 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p='http://primefaces.org/ui'>
+
+    <h:outputStylesheet library="css" name="style.css" />
+
+    <h:form>  
+        <p:menubar>
+            <p:menuitem value="Hemsida" url="index.xhtml" icon="ui-icon-home" />
+            <p:menuitem value="Student" url="student.xhtml" icon="ui-icon-document"/>
+            <p:menuitem value="Kurser" icon="ui-icon-pencil" url="#" />
+            <p:menuitem value="Relationer" icon="ui-icon-document" url="#" />
+            <p:menuitem value="Närvaro Lista" icon="ui-icon-calendar" url="#" />
+
+            <f:facet name="options">
+                <p:commandButton type="submit" value="Logout (#{teacherManagedBean.teacher.teacherUsername})" 
+                                 action="#{teacherManagedBean.logout()}"
+                                 icon="ui-icon-extlink" />
+            </f:facet>
+        </p:menubar>
+    </h:form>
+</ui:composition>

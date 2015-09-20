@@ -1,0 +1,34 @@
+.register_form_header {
+    text-align: center;
+    background: none repeat scroll 0 0 #E5E5E5;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 0px;
+}
+
+.login_form {
+    margin: auto;
+    width: 220px;
+    padding: 20px;
+    background: mediumaquamarine;
+}
+
+.reg-student-layout {
+    width: 100% !important;
+    height: 400px;
+    margin: auto;
+}
+
+.error {
+    font-size: x-small;
+    color: red;
+}
+
+.form_label {
+    font-size: small;
+}
+
+.ui-widget, .ui-widget .ui-widget
+{
+    font-size: 98%;
+}
