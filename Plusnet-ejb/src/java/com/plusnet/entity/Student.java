@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -21,19 +23,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.hibernate.validator.constraints.Email;
 
-/**
- *
- * @author Kasim
- */
 @Entity
 @Table(name = "student")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Student.findAll", query = "SELECT s FROM Student s"),
-    @NamedQuery(name = "Student.findByStudentId", query = "SELECT s FROM Student s WHERE s.studentId = :studentId"),
+    @NamedQuery(name = "Student.findById", query = "SELECT s FROM Student s WHERE s.id = :id"),
     @NamedQuery(name = "Student.findByFirstName", query = "SELECT s FROM Student s WHERE s.firstName = :firstName"),
     @NamedQuery(name = "Student.findByLastName", query = "SELECT s FROM Student s WHERE s.lastName = :lastName"),
-    @NamedQuery(name = "Student.findByTelefon", query = "SELECT s FROM Student s WHERE s.telefon = :telefon"),
+    @NamedQuery(name = "Student.findByPhoneNumber", query = "SELECT s FROM Student s WHERE s.phoneNumber = :phoneNumber"),
     @NamedQuery(name = "Student.findByAddress", query = "SELECT s FROM Student s WHERE s.address = :address"),
     @NamedQuery(name = "Student.findByEmail", query = "SELECT s FROM Student s WHERE s.email = :email"),
     @NamedQuery(name = "Student.findByStartDate", query = "SELECT s FROM Student s WHERE s.startDate = :startDate")})
@@ -43,75 +41,75 @@ public class Student implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "student_id")
-    private Integer studentId;
+    @Column(name = "ID")
+    private Integer id;
     
     @Basic(optional = false)
     @NotNull
-    @Size(min = 2, max = 45, message = " (Mata in mellan 2-45 tecken)")
-    @Column(name = "first_name")
+    @Size(min = 1, max = 45, message = " (Mata in mellan 1-45 tecken)")
+    @Column(name = "FIRST_NAME")
     private String firstName;
     
     @Basic(optional = false)
     @NotNull
-    @Size(min = 2, max = 70, message = " (Mata in mellan 2-70 tecken)")
-    @Column(name = "last_name")
+    @Size(min = 1, max = 70, message = " (Mata in mellan 1-70 tecken)")
+    @Column(name = "LAST_NAME")
     private String lastName;
     
     @Basic(optional = false)
     @NotNull
-    @Size(min = 10, max = 13, message = " (Mata in mellan 10-13 tecken)")
-    @Column(name = "telefon")
-    private String telefon;
+    @Size(min = 1, max = 13, message = " (Mata in mellan 1-13 tecken)")
+    @Column(name = "PHONE_NUMBER")
+    private String phoneNumber;
     
     @Basic(optional = false)
     @NotNull
-    @Size(min = 10, max = 150, message = " (Mata in mellan 10-150 tecken)")
-    @Column(name = "address")
+    @Size(min = 1, max = 150, message = " (Mata in mellan 1-150 tecken)")
+    @Column(name = "ADDRESS")
     private String address;
     
-    @Email(message = " (Ogiltig email)")
+    @Email(message = " (Ogiltig email adress)")
     @Basic(optional = false)
     @NotNull
-    @Size(min = 5, max = 60, message = " (Mata in mellan 5-60 tecken)")
-    @Column(name = "email")
+    @Size(min = 1, max = 60, message = " (Mata in mellan 1-60 tecken)")
+    @Column(name = "EMAIL")
     private String email;
     
     @Basic(optional = false)
     @NotNull(message = " (Kan inte vara tomt)")
-    @Column(name = "start_date")
+    @Column(name = "START_DATE")
     @Temporal(TemporalType.DATE)
     private Date startDate;
     
     @ManyToMany(mappedBy = "studentList")
-    private List<Attendance> attendanceList;
-    
-    @ManyToMany(mappedBy = "studentList")
     private List<Course> courseList;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentID")
+    private List<Attendance> attendanceList;
 
     public Student() {
     }
 
-    public Student(Integer studentId) {
-        this.studentId = studentId;
+    public Student(Integer id) {
+        this.id = id;
     }
 
-    public Student(Integer studentId, String firstName, String lastName, String telefon, String address, String email, Date startDate) {
-        this.studentId = studentId;
+    public Student(Integer id, String firstName, String lastName, String phoneNumber, String address, String email, Date startDate) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.telefon = telefon;
+        this.phoneNumber = phoneNumber;
         this.address = address;
         this.email = email;
         this.startDate = startDate;
     }
 
-    public Integer getStudentId() {
-        return studentId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setStudentId(Integer studentId) {
-        this.studentId = studentId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -130,12 +128,12 @@ public class Student implements Serializable {
         this.lastName = lastName;
     }
 
-    public String getTelefon() {
-        return telefon;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setTelefon(String telefon) {
-        this.telefon = telefon;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getAddress() {
@@ -163,15 +161,6 @@ public class Student implements Serializable {
     }
 
     @XmlTransient
-    public List<Attendance> getAttendanceList() {
-        return attendanceList;
-    }
-
-    public void setAttendanceList(List<Attendance> attendanceList) {
-        this.attendanceList = attendanceList;
-    }
-
-    @XmlTransient
     public List<Course> getCourseList() {
         return courseList;
     }
@@ -180,10 +169,19 @@ public class Student implements Serializable {
         this.courseList = courseList;
     }
 
+    @XmlTransient
+    public List<Attendance> getAttendanceList() {
+        return attendanceList;
+    }
+
+    public void setAttendanceList(List<Attendance> attendanceList) {
+        this.attendanceList = attendanceList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (studentId != null ? studentId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -194,11 +192,15 @@ public class Student implements Serializable {
             return false;
         }
         Student other = (Student) object;
-        return !((this.studentId == null && other.studentId != null) || (this.studentId != null && !this.studentId.equals(other.studentId)));
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
-        return "com.plusnet.entity.Student[ studentId=" + studentId + " ]";
+        return "com.plusnet.entity.Student[ id=" + id + " ]";
     }
+
 }

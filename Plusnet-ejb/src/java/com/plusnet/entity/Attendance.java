@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.plusnet.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,8 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -24,68 +17,65 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author Kasim
- */
 @Entity
 @Table(name = "attendance")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Attendance.findAll", query = "SELECT a FROM Attendance a"),
-    @NamedQuery(name = "Attendance.findByAttendanceId", query = "SELECT a FROM Attendance a WHERE a.attendanceId = :attendanceId"),
+    @NamedQuery(name = "Attendance.findById", query = "SELECT a FROM Attendance a WHERE a.id = :id"),
     @NamedQuery(name = "Attendance.findByIsAttended", query = "SELECT a FROM Attendance a WHERE a.isAttended = :isAttended"),
     @NamedQuery(name = "Attendance.findByRecordDate", query = "SELECT a FROM Attendance a WHERE a.recordDate = :recordDate")})
 public class Attendance implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "attendance_id")
-    private Integer attendanceId;
+    @Column(name = "ID")
+    private Integer id;
+    
     @Basic(optional = false)
     @NotNull
-    @Column(name = "is_attended")
-    private boolean isAttended;
+    @Column(name = "IS_ATTENDED")
+    private short isAttended;
+    
     @Basic(optional = false)
     @NotNull
-    @Column(name = "record_date")
+    @Column(name = "RECORD_DATE")
     @Temporal(TemporalType.DATE)
     private Date recordDate;
-    @JoinTable(name = "student_has_attendance", joinColumns = {
-        @JoinColumn(name = "attendance_id", referencedColumnName = "attendance_id")}, inverseJoinColumns = {
-        @JoinColumn(name = "student_id", referencedColumnName = "student_id")})
-    @ManyToMany
-    private List<Student> studentList;
+    
+    @JoinColumn(name = "student_ID", referencedColumnName = "ID")
+    @ManyToOne(optional = false)
+    private Student studentID;
 
     public Attendance() {
     }
 
-    public Attendance(Integer attendanceId) {
-        this.attendanceId = attendanceId;
+    public Attendance(Integer id) {
+        this.id = id;
     }
 
-    public Attendance(Integer attendanceId, boolean isAttended, Date recordDate) {
-        this.attendanceId = attendanceId;
+    public Attendance(Integer id, short isAttended, Date recordDate) {
+        this.id = id;
         this.isAttended = isAttended;
         this.recordDate = recordDate;
     }
 
-    public Integer getAttendanceId() {
-        return attendanceId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setAttendanceId(Integer attendanceId) {
-        this.attendanceId = attendanceId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public boolean getIsAttended() {
+    public short getIsAttended() {
         return isAttended;
     }
 
-    public void setIsAttended(boolean isAttended) {
+    public void setIsAttended(short isAttended) {
         this.isAttended = isAttended;
     }
 
@@ -97,19 +87,18 @@ public class Attendance implements Serializable {
         this.recordDate = recordDate;
     }
 
-    @XmlTransient
-    public List<Student> getStudentList() {
-        return studentList;
+    public Student getStudentID() {
+        return studentID;
     }
 
-    public void setStudentList(List<Student> studentList) {
-        this.studentList = studentList;
+    public void setStudentID(Student studentID) {
+        this.studentID = studentID;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (attendanceId != null ? attendanceId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -120,7 +109,7 @@ public class Attendance implements Serializable {
             return false;
         }
         Attendance other = (Attendance) object;
-        if ((this.attendanceId == null && other.attendanceId != null) || (this.attendanceId != null && !this.attendanceId.equals(other.attendanceId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -128,7 +117,7 @@ public class Attendance implements Serializable {
 
     @Override
     public String toString() {
-        return "com.plusnet.entity.Attendance[ attendanceId=" + attendanceId + " ]";
+        return "com.plusnet.entity.Attendance[ id=" + id + " ]";
     }
-    
+
 }

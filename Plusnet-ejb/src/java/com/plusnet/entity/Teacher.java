@@ -1,16 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.plusnet.entity;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -19,78 +12,78 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author Kasim
- */
 @Entity
 @Table(name = "teacher")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Teacher.findAll", query = "SELECT t FROM Teacher t"),
-    @NamedQuery(name = "Teacher.findByTeacherId", query = "SELECT t FROM Teacher t WHERE t.teacherId = :teacherId"),
-    @NamedQuery(name = "Teacher.findByTeacherUsername", query = "SELECT t FROM Teacher t WHERE t.teacherUsername = :teacherUsername"),
-    @NamedQuery(name = "Teacher.findByTeacherPassword", query = "SELECT t FROM Teacher t WHERE t.teacherPassword = :teacherPassword"),
-    @NamedQuery(name = "Teacher.findByUsernameAndPassword", query = "SELECT t FROM Teacher t WHERE t.teacherUsername = :teacherUsername AND t.teacherPassword = :teacherPassword")})
+    @NamedQuery(name = "Teacher.findById", query = "SELECT t FROM Teacher t WHERE t.id = :id"),
+    @NamedQuery(name = "Teacher.findByUserName", query = "SELECT t FROM Teacher t WHERE t.userName = :userName"),
+    @NamedQuery(name = "Teacher.findByPassword", query = "SELECT t FROM Teacher t WHERE t.password = :password"),
+    @NamedQuery(name = "Teacher.findByUsernameAndPassword", query = "SELECT t FROM Teacher t WHERE"
+            + " t.userName = :userName AND t.password = :password")})
 public class Teacher implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "teacher_id")
-    private Integer teacherId;
+    @NotNull
+    @Column(name = "ID")
+    private Integer id;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
-    @Column(name = "teacher_username")
-    private String teacherUsername;
+    @Column(name = "USER_NAME")
+    private String userName;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
-    @Column(name = "teacher_password")
-    private String teacherPassword;
+    @Column(name = "PASSWORD")
+    private String password;
 
     public Teacher() {
     }
 
-    public Teacher(Integer teacherId) {
-        this.teacherId = teacherId;
+    public Teacher(Integer id) {
+        this.id = id;
     }
 
-    public Teacher(Integer teacherId, String teacherUsername, String teacherPassword) {
-        this.teacherId = teacherId;
-        this.teacherUsername = teacherUsername;
-        this.teacherPassword = teacherPassword;
+    public Teacher(Integer id, String userName, String password) {
+        this.id = id;
+        this.userName = userName;
+        this.password = password;
     }
 
-    public Integer getTeacherId() {
-        return teacherId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setTeacherId(Integer teacherId) {
-        this.teacherId = teacherId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getTeacherUsername() {
-        return teacherUsername;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setTeacherUsername(String teacherUsername) {
-        this.teacherUsername = teacherUsername;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getTeacherPassword() {
-        return teacherPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setTeacherPassword(String teacherPassword) {
-        this.teacherPassword = teacherPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (teacherId != null ? teacherId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -101,7 +94,7 @@ public class Teacher implements Serializable {
             return false;
         }
         Teacher other = (Teacher) object;
-        if ((this.teacherId == null && other.teacherId != null) || (this.teacherId != null && !this.teacherId.equals(other.teacherId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -109,7 +102,7 @@ public class Teacher implements Serializable {
 
     @Override
     public String toString() {
-        return "com.plusnet.entity.Teacher[ teacherId=" + teacherId + " ]";
+        return "com.plusnet.entity.Teacher[ id=" + id + " ]";
     }
-    
+
 }

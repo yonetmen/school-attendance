@@ -16,7 +16,7 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class AttendanceFacade extends AbstractFacade<Attendance> {
-    @PersistenceContext(unitName = "Plusnet-ejbPU")
+    @PersistenceContext
     private EntityManager em;
 
     @Override

@@ -24,7 +24,7 @@
                     <br><p:inputText style="margin: auto;" id="last_name" value="#{studentManagedBean.student.lastName}"/></br>
 
                     <h:outputText value="Telefon" styleClass="form_label"/><h:message for="tel_number" styleClass="error" />
-                    <br><p:inputText style="margin: auto;" id="tel_number" value="#{studentManagedBean.student.telefon}"/></br>
+                    <br><p:inputText style="margin: auto;" id="tel_number" value="#{studentManagedBean.student.phoneNumber}"/></br>
 
                     <h:outputText value="Adress" styleClass="form_label"/><h:message for="address" styleClass="error" />
                     <br><p:inputText style="margin: auto;" id="address" value="#{studentManagedBean.student.address}"/></br>
@@ -58,7 +58,7 @@
 
                         <p:column>
                             <f:facet name="header">Telefon</f:facet>
-                            <p:outputLabel value="#{std.telefon}"/>
+                            <p:outputLabel value="#{std.phoneNumber}"/>
                         </p:column>
 
                         <p:column>
@@ -103,7 +103,7 @@
                     <br><p:inputText style="margin: auto;" id="l_name" value="#{studentManagedBean.student.lastName}"/></br>
 
                     <h:outputText value="Telefon" styleClass="form_label"/><h:message for="t_number" styleClass="error" />
-                    <br><p:inputText style="margin: auto;" id="t_number" value="#{studentManagedBean.student.telefon}"/></br>
+                    <br><p:inputText style="margin: auto;" id="t_number" value="#{studentManagedBean.student.phoneNumber}"/></br>
 
                     <h:outputText value="Adress" styleClass="form_label"/><h:message for="addres" styleClass="error" />
                     <br><p:inputText style="margin: auto;" id="addres" value="#{studentManagedBean.student.address}"/></br>

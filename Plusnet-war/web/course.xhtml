@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f='http://java.sun.com/jsf/core'
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Registrera ny student</title>
+    </h:head>
+    <h:body>
+        <ui:include src="header.xhtml"/><br></br>
+
+        <!-- Register form -->
+        <p:layout id="layout" styleClass="reg-student-layout">
+            <p:layoutUnit id="layoutRegister" position="west" resizable="false" size="225">
+                <h:form id="registerForm" style="margin-left: 5px;">
+                    <h3 class="register_form_header">Registrera nya kurs</h3>
+
+                    <h:outputText value="Kursnamn" styleClass="form_label"/><h:message for="course_name" styleClass="error"/>
+                    <br><p:inputText style="margin: auto;" id="course_name" value="#{courseManagedBean.course.courseName}"/></br>
+
+                    <h:outputText value="Kurskod" styleClass="form_label"/><h:message for="course_code" styleClass="error" />
+                    <br><p:inputText style="margin: auto;" id="course_code" value="#{courseManagedBean.course.courseCode}"/></br>
+
+                    <h:outputText value="Kursspråk" styleClass="form_label"/><h:message for="course_language" styleClass="error" />
+                    <br><p:inputText style="margin: auto;" id="course_language" value="#{courseManagedBean.course.courseLanguage}"/></br>
+
+                    <h:outputText value="Kursnivå" styleClass="form_label"/><h:message for="course_level" styleClass="error" />
+                    <br><p:inputText style="margin: auto;" id="course_level" value="#{courseManagedBean.course.courseLevel}"/></br>
+
+                    <h:outputText value="Ansvarig" styleClass="form_label"/><h:message for="responsible" styleClass="error" />
+                    <br><p:inputText style="margin: auto;" id="responsible" value="#{courseManagedBean.course.responsible}"/></br>
+
+                    <br><p:commandButton id="submit" value="Skapa Kurs" update="registerForm, :tableForm:dataTable"
+                                                        actionListener="#{courseManagedBean.createCourse()}" /></br>
+                </h:form>
+            </p:layoutUnit>
+
+            <!-- Output form -->
+            <p:layoutUnit id="layoutTable" position="center">
+                <h:form style="margin-left: 5px;" id="tableForm">
+                    <p:dataTable id="dataTable" value="#{courseManagedBean.getCourses()}" 
+                                 var="course" tableStyle="width:auto">
+
+                        <p:column>
+                            <f:facet name="header">Kursnamn</f:facet>
+                            <p:outputLabel value="#{course.courseName}"/>
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">Kurskod</f:facet>
+                            <p:outputLabel value="#{course.courseCode}"/>
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">Kursspråk</f:facet>
+                            <p:outputLabel value="#{course.courseLanguage}"/>
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">Kursnivå</f:facet>
+                            <p:outputLabel value="#{course.courseLevel}"/>
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">Ansvarig</f:facet>
+                            <p:outputLabel value="#{course.responsible}"/>
+                        </p:column>
+
+                        <p:column style="width:5%; text-align: center;">
+                            <f:facet name="header">Edit</f:facet>
+                            <p:commandLink value="edit" type="button" 
+                                           action="#{courseManagedBean.setCourse(course)}"
+                                           update=":update" oncomplete="PF('update').show();"/>
+                        </p:column>
+
+                        <p:column style="width:8%; text-align: center;">
+                            <f:facet name="header">Ta bort</f:facet>
+                            <p:commandLink value="delete" update="@form" 
+                                           action="#{courseManagedBean.deleteCourse(course)}"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:layoutUnit>
+
+            <p:dialog id="update" header="Updatera Kurs" widgetVar="update" modal="true" height="350" visible="#{facesContext.validationFailed}">
+                <h:form id="updateForm">   
+                    <h:outputText value="Kursnamn" styleClass="form_label"/><h:message for="c_name" styleClass="error"/>
+                    <br><p:inputText style="margin: auto;" id="c_name" value="#{courseManagedBean.course.courseName}"/></br>
+
+                    <h:outputText value="Kurskod" styleClass="form_label"/><h:message for="c_code" styleClass="error" />
+                    <br><p:inputText style="margin: auto;" id="c_code" value="#{courseManagedBean.course.courseCode}"/></br>
+
+                    <h:outputText value="Kursspråk" styleClass="form_label"/><h:message for="c_language" styleClass="error" />
+                    <br><p:inputText style="margin: auto;" id="c_language" value="#{courseManagedBean.course.courseLanguage}"/></br>
+
+                    <h:outputText value="Kursnivå" styleClass="form_label"/><h:message for="c_level" styleClass="error" />
+                    <br><p:inputText style="margin: auto;" id="c_level" value="#{courseManagedBean.course.courseLevel}"/></br>
+
+                    <h:outputText value="Ansvarig" styleClass="form_label"/><h:message for="c_responsible" styleClass="error" />
+                    <br><p:inputText style="margin: auto;" id="c_responsible" value="#{courseManagedBean.course.responsible}"/></br>
+
+                    <br><p:commandButton id="updateButton" value="Updatera" update=":tableForm:dataTable" 
+                                         action="#{courseManagedBean.editCourse(course)}"
+                                         onclick="if (args &amp;&amp; !args.validationFailed) editDialog.hide()" /></br>
+                </h:form>
+            </p:dialog>
+        </p:layout>
+    </h:body>
+</html>

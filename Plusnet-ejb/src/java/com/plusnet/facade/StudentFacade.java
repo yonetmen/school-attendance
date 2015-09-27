@@ -5,14 +5,10 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-/**
- *
- * @author Kasim
- */
 @Stateless
 public class StudentFacade extends AbstractFacade<Student> {
 
-    @PersistenceContext(unitName = "Plusnet-ejbPU")
+    @PersistenceContext
     private EntityManager em;
 
     @Override

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.plusnet.entity;
 
 import java.io.Serializable;
@@ -24,75 +19,84 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author Kasim
- */
 @Entity
 @Table(name = "course")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Course.findAll", query = "SELECT c FROM Course c"),
-    @NamedQuery(name = "Course.findByCourseId", query = "SELECT c FROM Course c WHERE c.courseId = :courseId"),
+    @NamedQuery(name = "Course.findById", query = "SELECT c FROM Course c WHERE c.id = :id"),
     @NamedQuery(name = "Course.findByCourseName", query = "SELECT c FROM Course c WHERE c.courseName = :courseName"),
     @NamedQuery(name = "Course.findByCourseCode", query = "SELECT c FROM Course c WHERE c.courseCode = :courseCode"),
-    @NamedQuery(name = "Course.findByCourseLanguage", query = "SELECT c FROM Course c WHERE c.courseLanguage = :courseLanguage"),
+    @NamedQuery(name = "Course.findByLanguage", query = "SELECT c FROM Course c WHERE c.courseLanguage = :courseLanguage"),
     @NamedQuery(name = "Course.findByCourseLevel", query = "SELECT c FROM Course c WHERE c.courseLevel = :courseLevel"),
-    @NamedQuery(name = "Course.findByCourseResponsible", query = "SELECT c FROM Course c WHERE c.courseResponsible = :courseResponsible")})
+    @NamedQuery(name = "Course.findByResponsible", query = "SELECT c FROM Course c WHERE c.responsible = :responsible")})
 public class Course implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "course_id")
-    private Integer courseId;
+    @Column(name = "ID")
+    private Integer id;
+    
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 60)
-    @Column(name = "course_name")
+    @Size(min = 5, max = 45, message = " (Mata in mellan 5-45 tecken)")
+    @Column(name = "COURSE_NAME")
     private String courseName;
+    
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "course_code")
+    @Size(min = 4, max = 6, message = " (Mata in mellan 1-6 tecken)")
+    @Column(name = "COURSE_CODE")
     private String courseCode;
-    @Size(max = 45)
-    @Column(name = "course_language")
-    private String courseLanguage;
-    @Size(max = 45)
-    @Column(name = "course_level")
-    private String courseLevel;
+    
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "course_responsible")
-    private String courseResponsible;
+    @Size(min = 5, max = 45, message = " (Mata in mellan 1-45 tecken)")
+    @Column(name = "COURSE_LANGUAGE")
+    private String courseLanguage;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 4, max = 10, message = " (Mata in mellan 1-10 tecken)")
+    @Column(name = "COURSE_LEVEL")
+    private String courseLevel;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 5, max = 45, message = " (Mata in mellan 1-45 tecken)")
+    @Column(name = "RESPONSIBLE")
+    private String responsible;
+    
     @JoinTable(name = "student_has_course", joinColumns = {
-        @JoinColumn(name = "course_id", referencedColumnName = "course_id")}, inverseJoinColumns = {
-        @JoinColumn(name = "student_id", referencedColumnName = "student_id")})
+        @JoinColumn(name = "course_ID", referencedColumnName = "ID")}, inverseJoinColumns = {
+        @JoinColumn(name = "student_ID", referencedColumnName = "ID")})
     @ManyToMany
     private List<Student> studentList;
 
     public Course() {
     }
 
-    public Course(Integer courseId) {
-        this.courseId = courseId;
+    public Course(Integer id) {
+        this.id = id;
     }
 
-    public Course(Integer courseId, String courseName, String courseCode, String courseResponsible) {
-        this.courseId = courseId;
+    public Course(Integer id, String courseName, String courseCode, String language, String courseLevel, String responsible) {
+        this.id = id;
         this.courseName = courseName;
         this.courseCode = courseCode;
-        this.courseResponsible = courseResponsible;
+        this.courseLanguage = language;
+        this.courseLevel = courseLevel;
+        this.responsible = responsible;
     }
 
-    public Integer getCourseId() {
-        return courseId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCourseId(Integer courseId) {
-        this.courseId = courseId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getCourseName() {
@@ -127,12 +131,12 @@ public class Course implements Serializable {
         this.courseLevel = courseLevel;
     }
 
-    public String getCourseResponsible() {
-        return courseResponsible;
+    public String getResponsible() {
+        return responsible;
     }
 
-    public void setCourseResponsible(String courseResponsible) {
-        this.courseResponsible = courseResponsible;
+    public void setResponsible(String responsible) {
+        this.responsible = responsible;
     }
 
     @XmlTransient
@@ -147,7 +151,7 @@ public class Course implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (courseId != null ? courseId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -158,7 +162,7 @@ public class Course implements Serializable {
             return false;
         }
         Course other = (Course) object;
-        if ((this.courseId == null && other.courseId != null) || (this.courseId != null && !this.courseId.equals(other.courseId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -166,7 +170,7 @@ public class Course implements Serializable {
 
     @Override
     public String toString() {
-        return "com.plusnet.entity.Course[ courseId=" + courseId + " ]";
+        return "com.plusnet.entity.Course[ id=" + id + " ]";
     }
-    
+
 }

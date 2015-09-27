@@ -17,7 +17,7 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class TeacherFacade extends AbstractFacade<Teacher> {
 
-    @PersistenceContext(unitName = "Plusnet-ejbPU")
+    @PersistenceContext
     private EntityManager em;
 
     @Override
@@ -33,8 +33,8 @@ public class TeacherFacade extends AbstractFacade<Teacher> {
         try {
             Teacher teacher = (Teacher) em.createNamedQuery(
                     "Teacher.findByUsernameAndPassword")
-                    .setParameter("teacherUsername", username)
-                    .setParameter("teacherPassword", password)
+                    .setParameter("userName", username)
+                    .setParameter("password", password)
                     .getSingleResult();
             return teacher;
         } catch (Exception e) {

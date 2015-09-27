@@ -45,8 +45,8 @@ public class TeacherManagedBean {
     public String authenticateTeacher() {
         String outcome = null;
 
-        Teacher t = teacherFacade.authenticateTeacher(teacher.getTeacherUsername(),
-                teacher.getTeacherPassword());
+        Teacher t = teacherFacade.authenticateTeacher(teacher.getUserName(),
+                teacher.getPassword());
         if (t != null) {
             outcome = "index?faces-redirect=true";
         } else {

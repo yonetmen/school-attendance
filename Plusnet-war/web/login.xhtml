@@ -16,14 +16,14 @@
 
                     <f:facet name="header">Admin Login</f:facet>
                     <p:outputLabel for="teacher_username" value="Användernamn:" />   
-                    <p:inputText id="teacher_username" value="#{teacherManagedBean.teacher.teacherUsername}"
+                    <p:inputText id="teacher_username" value="#{teacherManagedBean.teacher.userName}"
                                  required="true" requiredMessage="Användernamnet kan inte vara tomt">
                         <f:validateLength minimum="3" maximum="25" />
                     </p:inputText>
 
 
                     <p:outputLabel for="teacher_password" value="Lösenord:" />   
-                    <p:password id="teacher_password" value="#{teacherManagedBean.teacher.teacherPassword}"
+                    <p:password id="teacher_password" value="#{teacherManagedBean.teacher.password}"
                                 required="true" requiredMessage="Lösenordet kan inte vara tomt">
                         <f:validateLength minimum="3" maximum="25" />
                     </p:password>

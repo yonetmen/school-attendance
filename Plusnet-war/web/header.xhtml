@@ -11,12 +11,12 @@
         <p:menubar>
             <p:menuitem value="Hemsida" url="index.xhtml" icon="ui-icon-home" />
             <p:menuitem value="Student" url="student.xhtml" icon="ui-icon-document"/>
-            <p:menuitem value="Kurser" icon="ui-icon-pencil" url="#" />
+            <p:menuitem value="Kurser" url="course.xhtml" icon="ui-icon-pencil" />
             <p:menuitem value="Relationer" icon="ui-icon-document" url="#" />
             <p:menuitem value="Närvaro Lista" icon="ui-icon-calendar" url="#" />
 
             <f:facet name="options">
-                <p:commandButton type="submit" value="Logout (#{teacherManagedBean.teacher.teacherUsername})" 
+                <p:commandButton type="submit" value="Logout (#{teacherManagedBean.teacher.userName})" 
                                  action="#{teacherManagedBean.logout()}"
                                  icon="ui-icon-extlink" />
             </f:facet>
