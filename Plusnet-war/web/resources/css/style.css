@@ -32,3 +32,18 @@
 {
     font-size: 98%;
 }
+
+.info {
+    font-weight: bold;
+    padding-left: 100px;
+}
+
+.stat-panel {
+    width: 600px;
+    height: auto;
+}
+
+.stat-layout { 
+    width: 608px; 
+    margin: auto;
+}

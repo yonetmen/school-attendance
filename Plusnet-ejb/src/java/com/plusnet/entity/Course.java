@@ -47,25 +47,25 @@ public class Course implements Serializable {
     
     @Basic(optional = false)
     @NotNull
-    @Size(min = 4, max = 6, message = " (Mata in mellan 1-6 tecken)")
+    @Size(min = 4, max = 6, message = " (Mata in mellan 4-6 tecken)")
     @Column(name = "COURSE_CODE")
     private String courseCode;
     
     @Basic(optional = false)
     @NotNull
-    @Size(min = 5, max = 45, message = " (Mata in mellan 1-45 tecken)")
+    @Size(min = 5, max = 45, message = " (Mata in mellan 5-45 tecken)")
     @Column(name = "COURSE_LANGUAGE")
     private String courseLanguage;
     
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 4, max = 10, message = " (Mata in mellan 1-10 tecken)")
+    @NotNull(message = " (Kan inte vara tom)")
+    @Size(min = 4, max = 10)
     @Column(name = "COURSE_LEVEL")
     private String courseLevel;
     
     @Basic(optional = false)
     @NotNull
-    @Size(min = 5, max = 45, message = " (Mata in mellan 1-45 tecken)")
+    @Size(min = 5, max = 45, message = " (Mata in mellan 5-45 tecken)")
     @Column(name = "RESPONSIBLE")
     private String responsible;
     

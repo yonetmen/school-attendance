@@ -13,27 +13,32 @@
 
         <!-- Register form -->
         <p:layout id="layout" styleClass="reg-student-layout">
-            <p:layoutUnit id="layoutRegister" position="west" resizable="false" size="225">
+            <p:layoutUnit id="layoutRegister" position="west" resizable="false" size="210">
                 <h:form id="registerForm" style="margin-left: 5px;">
-                    <h3 class="register_form_header">Registrera nya kurs</h3>
-
-                    <h:outputText value="Kursnamn" styleClass="form_label"/><h:message for="course_name" styleClass="error"/>
-                    <br><p:inputText style="margin: auto;" id="course_name" value="#{courseManagedBean.course.courseName}"/></br>
+                    <br/><p:outputLabel class="ui-state-default" style="font-size: 18px; padding: 5px 15px;" value="Registrera ny kurs"/>
+                    <br/>
+                    <br/><h:outputText value="Kursnamn" styleClass="form_label"/><h:message for="course_name" styleClass="error"/>
+                    <br/><p:inputText style="margin: auto;" id="course_name" value="#{courseManagedBean.course.courseName}"/>
 
                     <h:outputText value="Kurskod" styleClass="form_label"/><h:message for="course_code" styleClass="error" />
-                    <br><p:inputText style="margin: auto;" id="course_code" value="#{courseManagedBean.course.courseCode}"/></br>
+                    <br/><p:inputText style="margin: auto;" id="course_code" value="#{courseManagedBean.course.courseCode}"/>
 
                     <h:outputText value="Kursspråk" styleClass="form_label"/><h:message for="course_language" styleClass="error" />
-                    <br><p:inputText style="margin: auto;" id="course_language" value="#{courseManagedBean.course.courseLanguage}"/></br>
+                    <br/><p:inputText style="margin: auto;" id="course_language" value="#{courseManagedBean.course.courseLanguage}"/>
 
                     <h:outputText value="Kursnivå" styleClass="form_label"/><h:message for="course_level" styleClass="error" />
-                    <br><p:inputText style="margin: auto;" id="course_level" value="#{courseManagedBean.course.courseLevel}"/></br>
+                    <br/>
+                    <p:selectOneMenu id="course_level" style="width: 95%" value="#{courseManagedBean.course.courseLevel}">
+                        <f:selectItem itemLabel="Välj kursnivå" itemValue="" />
+                        <f:selectItem itemLabel="Grund" itemValue="Grundnivå" />
+                        <f:selectItem itemLabel="Avancerad" itemValue="Avancerad" />
+                    </p:selectOneMenu>
 
-                    <h:outputText value="Ansvarig" styleClass="form_label"/><h:message for="responsible" styleClass="error" />
-                    <br><p:inputText style="margin: auto;" id="responsible" value="#{courseManagedBean.course.responsible}"/></br>
+                    <br/><h:outputText value="Ansvarig" styleClass="form_label"/><h:message for="responsible" styleClass="error" />
+                    <br/><p:inputText style="margin: auto;" id="responsible" value="#{courseManagedBean.course.responsible}"/>
 
-                    <br><p:commandButton id="submit" value="Skapa Kurs" update="registerForm, :tableForm:dataTable"
-                                                        actionListener="#{courseManagedBean.createCourse()}" /></br>
+                    <br/><br/><p:commandButton id="submit" value="Skapa Kurs" update="registerForm, :tableForm:dataTable"
+                                         style="width: 95%" actionListener="#{courseManagedBean.createCourse()}" />
                 </h:form>
             </p:layoutUnit>
 
@@ -41,9 +46,9 @@
             <p:layoutUnit id="layoutTable" position="center">
                 <h:form style="margin-left: 5px;" id="tableForm">
                     <p:dataTable id="dataTable" value="#{courseManagedBean.getCourses()}" 
-                                 var="course" tableStyle="width:auto">
+                                 var="course" >
 
-                        <p:column>
+                        <p:column style="width: 250px">
                             <f:facet name="header">Kursnamn</f:facet>
                             <p:outputLabel value="#{course.courseName}"/>
                         </p:column>
@@ -83,8 +88,10 @@
                     </p:dataTable>
                 </h:form>
             </p:layoutUnit>
-
-            <p:dialog id="update" header="Updatera Kurs" widgetVar="update" modal="true" height="350" visible="#{facesContext.validationFailed}">
+            
+            
+            <!-- Update Modal -->
+            <p:dialog id="update" closable="false" header="Updatera Kurs" widgetVar="update" modal="true" height="300" visible="#{facesContext.validationFailed}">
                 <h:form id="updateForm">   
                     <h:outputText value="Kursnamn" styleClass="form_label"/><h:message for="c_name" styleClass="error"/>
                     <br><p:inputText style="margin: auto;" id="c_name" value="#{courseManagedBean.course.courseName}"/></br>
@@ -102,7 +109,7 @@
                     <br><p:inputText style="margin: auto;" id="c_responsible" value="#{courseManagedBean.course.responsible}"/></br>
 
                     <br><p:commandButton id="updateButton" value="Updatera" update=":tableForm:dataTable" 
-                                         action="#{courseManagedBean.editCourse(course)}"
+                                         action="#{courseManagedBean.editCourse(course)}" style="width: 100%"
                                          onclick="if (args &amp;&amp; !args.validationFailed) editDialog.hide()" /></br>
                 </h:form>
             </p:dialog>

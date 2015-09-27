@@ -70,5 +70,9 @@ public class StudentManagedBean {
     public void setStudentList(List<Student> studentList) {
         this.studentList = studentList;
     }
+    
+    public void closeDetailsModal(){
+        student = new Student();
+    }
 
 }
