@@ -45,6 +45,14 @@ public class StudentManagedBean {
     public void deleteStudent(Student std) {
         studentFacade.remove(std);
     }
+    
+    public int studentCount() {
+        return studentFacade.count();
+    }
+    
+    public long getStudentCountByCourseLanguage(String language) {
+        return studentFacade.getStudentCountByCourseLanguage(language);
+    }
 
     // GETTERS & SETTERS
     public Student getStudent() {

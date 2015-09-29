@@ -15,7 +15,7 @@ public class CourseManagedBean {
     private CourseFacade courseFacade;
     private Course course;
     private List<Course> courseList;
-    
+
     public CourseManagedBean() {
         course = new Course();
     }
@@ -24,21 +24,42 @@ public class CourseManagedBean {
         courseFacade.create(course);
         course = new Course();
     }
-    
+
     public List<Course> getCourses() {
         return courseList = courseFacade.findAll();
     }
-    
+
     public void editCourse(Course c) {
         courseFacade.edit(course);
         course = new Course();
     }
-    
+
     public void deleteCourse(Course course) {
         courseFacade.remove(course);
     }
+
+    public int courseCount() {
+        return courseFacade.count();
+    }
+
+    public int getByLanguage(int languageCode) {
+        return courseFacade.getByLanguage(languageCode);
+    }
+
+    public String getMostPopulatedCourseName(String popularity) {
+        String courseName = courseFacade.getMostPopulatedCourseName(popularity);
+        return courseName;
+    }
     
+    public long getMostPopulatedCourseCount(String popularity) {
+        long count = courseFacade.getMostPopulatedCourseCount(popularity);
+        return count;
+    }
     
+    public long getCourseCountByLevel(String level) {
+        return courseFacade.getCourseCountByLevel(level);
+    }
+
     // GETTERS & SETTERS
     public Course getCourse() {
         return course;
@@ -62,5 +83,5 @@ public class CourseManagedBean {
 
     public void setCourseList(List<Course> courseList) {
         this.courseList = courseList;
-    }    
+    }
 }

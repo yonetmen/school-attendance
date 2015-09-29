@@ -15,38 +15,44 @@
             <p:layoutUnit position="center">
                 <p:panelGrid columns="2" styleClass="stat-panel">
                     <f:facet name="header">
-                        <h3>Studenter - Kurser</h3>
+                        <h3>Student &amp; Kurs Statistiker</h3>
                     </f:facet>
 
                     <h:outputText value="Antal studenter" />
-                    <h:outputText value="" />
+                    <h:outputText value="#{studentManagedBean.studentCount()}" />
 
                     <h:outputText value="Antal kurser" />
-                    <h:outputText value="" />
+                    <h:outputText value="#{courseManagedBean.courseCount()}" />
 
                     <h:outputText value="Mest populära kurs" />
-                    <h:outputText value="" />
+                    <h:outputText value="#{courseManagedBean.getMostPopulatedCourseName('DESC')}" />
+                    
+                    <h:outputText value="Antal studenter på mest populära kursen" />
+                    <h:outputText value="#{courseManagedBean.getMostPopulatedCourseCount('DESC')}" />
 
                     <h:outputText value="Minst populära kurs" />
-                    <h:outputText value="" />
+                    <h:outputText value="#{courseManagedBean.getMostPopulatedCourseName('ASC')}" />
                     
-                    <h:outputText value="Kurser på svenska" />
-                    <h:outputText value="" />
+                    <h:outputText value="Antal studenter på minst populära kursen" />
+                    <h:outputText value="#{courseManagedBean.getMostPopulatedCourseCount('ASC')}" />
+                    
+                    <h:outputText value="Antal kurser på svenska" />
+                    <h:outputText value="#{courseManagedBean.getByLanguage(1)}" />
                     
                     <h:outputText value="Antal studenter i svenska kurser" />
-                    <h:outputText value="" />
+                    <h:outputText value="#{studentManagedBean.getStudentCountByCourseLanguage('Svenska')}" />
                     
-                    <h:outputText value="Kurser på engelska" />
-                    <h:outputText value="" />
+                    <h:outputText value="Antal kurser på engelska" />
+                    <h:outputText value="#{courseManagedBean.getByLanguage(0)}" />
                     
                     <h:outputText value="Antal studenter i engelska kurser" />
-                    <h:outputText value="" />
+                    <h:outputText value="#{studentManagedBean.getStudentCountByCourseLanguage('Engelska')}" />
                     
                     <h:outputText value="Kurser på grundnivå" />
-                    <h:outputText value="" />
+                    <h:outputText value="#{courseManagedBean.getCourseCountByLevel('Grundnivå')}" />
                     
                     <h:outputText value="Kurser på avancerad nivå" />
-                    <h:outputText value="" />
+                    <h:outputText value="#{courseManagedBean.getCourseCountByLevel('Avancerad')}" />
 
                 </p:panelGrid>
 

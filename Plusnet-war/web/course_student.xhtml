@@ -11,7 +11,7 @@
     <h:body>
         <ui:include src="header.xhtml"/><br></br>
         <br/><br/>
-        <div>
+        <div id="add_delete_relation">
             <div class="ui-state-default" style="width: 900px; height: 50px; line-height: 10px; margin: auto; border-radius: 5px; text-align: center;">
                 <div style="float: left;">
                     <h2 style="margin-left: 50px; padding-bottom: 20px;">Välj en student</h2>
@@ -41,7 +41,7 @@
                         </p:column>
 
                         <p:column>
-                            <p:commandButton type="submit" value="Lägg till">
+                            <p:commandButton type="submit" value="Lägg till" action="#{relationerMenagedBean.add(studentManagedBean.student.id, courseManagedBean.course.id)}" >
                             </p:commandButton>
                         </p:column>
                         
