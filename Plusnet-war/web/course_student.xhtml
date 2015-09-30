@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8' ?>
+<!--<?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
@@ -11,49 +11,83 @@
     <h:body>
         <ui:include src="header.xhtml"/><br></br>
         <br/><br/>
-        <div id="add_delete_relation">
-            <div class="ui-state-default" style="width: 900px; height: 50px; line-height: 10px; margin: auto; border-radius: 5px; text-align: center;">
+        <div id="add_delete_relation" style="width: 800px; margin: auto;">
+            <div class="ui-state-default" style="height: 50px; line-height: 10px; border-radius: 5px;">
                 <div style="float: left;">
-                    <h2 style="margin-left: 50px; padding-bottom: 20px;">Välj en student</h2>
+                    <h2 style="margin-left: 20px; padding-bottom: 20px;">Välj en student</h2>
                 </div>
                 <div style="display: inline-block;">
-                    <h2 style="padding-bottom: 20px;">Välj en kurs</h2>
+                    <h2 style="padding-bottom: 20px; margin-left: 230px;">Välj en kurs</h2>
                 </div>
             </div>
             <br/>
-            <p:layout style="margin: auto; width: 900px;">
+            <p:layout style="margin: auto; width: 800px;">
                 <p:layoutUnit position="center">
-                    <p:panelGrid columns="4" >
-                        <p:column>                        
-                            <p:selectOneMenu id="student_select" effect="drop" value="#{studentManagedBean.student.id}" >
-                                <f:selectItems value="#{studentManagedBean.getStudents()}"
-                                               var="std" itemLabel="#{std.firstName} #{std.lastName} ::: #{std.email}"
-                                               itemValue="#{std.id}" />
-                            </p:selectOneMenu>
-                        </p:column>
+                    <h:form>
+                        <p:panelGrid columns="4" >
+                            <p:column>                        
+                                <p:selectOneMenu id="student_select" effect="drop" value="#{relationerMenagedBean.studentId}" >
+                                    <f:selectItems value="#{relationerMenagedBean.getStudents()}"
+                                                   var="std" itemLabel="#{std.firstName} #{std.lastName} ::: #{std.email}"
+                                                   itemValue="#{std.id}" />
+                                </p:selectOneMenu>
+                            </p:column>
 
-                        <p:column>
-                            <p:selectOneMenu id="course_select" effect="drop" value="#{courseManagedBean.course.id}" >
-                                <f:selectItems value="#{courseManagedBean.getCourses()}"
-                                               var="course" itemLabel="#{course.courseName}"
-                                               itemValue="#{course.id}" />
-                            </p:selectOneMenu>
-                        </p:column>
+                            <p:column>
+                                <p:selectOneMenu id="course_select" effect="drop" value="#{relationerMenagedBean.courseId}" >
+                                    <f:selectItems value="#{relationerMenagedBean.getCourses()}"
+                                                   var="course" itemLabel="#{course.courseName}"
+                                                   itemValue="#{course.id}" />
+                                </p:selectOneMenu>
+                            </p:column>
 
-                        <p:column>
-                            <p:commandButton type="submit" value="Lägg till" action="#{relationerMenagedBean.add(studentManagedBean.student.id, courseManagedBean.course.id)}" >
-                            </p:commandButton>
-                        </p:column>
-                        
-                        <p:column>
-                            <p:commandButton type="submit" value="Ta bort">
-                            </p:commandButton>
-                        </p:column>
-                        
-                    </p:panelGrid>
+                            <p:column>
+                                <p:commandButton type="submit" value="Lägg till" action="#{relationerMenagedBean.add()}" >
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:panelGrid>
+                    </h:form>
                 </p:layoutUnit>
             </p:layout>
         </div>
+
+
+         Output Table 
+        <p:layout style="width: 800px; margin: auto; margin-top: 100px !important;">
+            <p:layoutUnit id="course_student_table" position="center">
+                <h:form style="margin-left: 5px;" id="tableForm">
+                    <p:dataTable id="dataTable" value="#{relationerMenagedBean.getRelations()}" 
+                                 var="entry" >
+
+                        <p:column>
+                            <f:facet name="header">Student Namn</f:facet>
+                            <p:outputLabel value="#{enty.key.firstName} #{enty.key.lastName}"/><br/>
+                            <p:outputLabel value="#{enty.key.email}"/>
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">Kurs namn</f:facet>
+                            <p:outputLabel value="#{enty.value.courseName}"/>
+                        </p:column>
+
+
+
+                        <p:column style="width: 25px">
+                            <f:facet name="header">Edit</f:facet>
+                            <p:commandLink value="edit" type="button" 
+                                           action="#{studentManagedBean.setStudent(std)}"/>
+                        </p:column>
+
+                        <p:column style="width: 55px; text-align: center">
+                            <f:facet name="header">Ta bort</f:facet>
+                            <p:commandLink value="delete" update="@form" 
+                                           action="#{studentManagedBean.deleteStudent(std)}"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:layoutUnit>
+        </p:layout>
 
 
 
@@ -62,4 +96,4 @@
 
     </h:body>
 </html>
-
+-->

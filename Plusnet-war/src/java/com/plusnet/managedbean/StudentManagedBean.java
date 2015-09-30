@@ -2,6 +2,7 @@ package com.plusnet.managedbean;
 
 import com.plusnet.entity.Student;
 import com.plusnet.facade.StudentFacade;
+import java.io.Serializable;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -11,7 +12,7 @@ import javax.faces.context.FacesContext;
 
 @ManagedBean
 @SessionScoped
-public class StudentManagedBean {
+public class StudentManagedBean implements Serializable {
 
     @EJB
     private StudentFacade studentFacade;

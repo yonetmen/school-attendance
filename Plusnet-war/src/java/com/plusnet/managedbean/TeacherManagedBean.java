@@ -2,6 +2,7 @@ package com.plusnet.managedbean;
 
 import com.plusnet.entity.Teacher;
 import com.plusnet.facade.TeacherFacade;
+import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
@@ -12,7 +13,7 @@ import javax.faces.context.FacesContext;
 
 @ManagedBean
 @SessionScoped
-public class TeacherManagedBean {
+public class TeacherManagedBean implements Serializable {
 
     @EJB
     private TeacherFacade teacherFacade;

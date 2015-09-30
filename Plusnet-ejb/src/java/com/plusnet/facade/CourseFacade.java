@@ -1,6 +1,7 @@
 package com.plusnet.facade;
 
 import com.plusnet.entity.Course;
+import com.plusnet.entity.Student;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -60,5 +61,11 @@ public class CourseFacade extends AbstractFacade<Course> {
                                             "WHERE c.COURSE_LEVEL = '" + level + "';");
         long result = (long) query.getSingleResult();
         return result;
+    }
+    
+    public boolean addStudent(int studentId, int courseId) {
+        Course course = em.find(Course.class, courseId);
+        Student student = em.find(Student.class, studentId);
+        return course.getStudentList().add(student);
     }
 }
