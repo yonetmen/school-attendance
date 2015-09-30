@@ -1,5 +1,6 @@
 package com.plusnet.managedbean;
 
+import com.plusnet.entity.Course;
 import com.plusnet.entity.Student;
 import com.plusnet.facade.StudentFacade;
 import java.io.Serializable;
@@ -40,7 +41,7 @@ public class StudentManagedBean implements Serializable {
 
     public void editStudent(Student std) {
         studentFacade.edit(student);
-        student = new Student();
+//        student = new Student();
     }
 
     public void deleteStudent(Student std) {
@@ -53,6 +54,10 @@ public class StudentManagedBean implements Serializable {
     
     public long getStudentCountByCourseLanguage(String language) {
         return studentFacade.getStudentCountByCourseLanguage(language);
+    }
+    
+    public List<Course> getCourseListByStudentId(int studentId) {
+        return studentFacade.getCourseList(studentId);
     }
 
     // GETTERS & SETTERS

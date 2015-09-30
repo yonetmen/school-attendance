@@ -108,9 +108,7 @@ public class RelationerMenagedBean implements Serializable {
     public List<Entry<Student, Course>> getRelations() {
         List<Course> courses = courseFacade.findAll();
         List<Student> students = studentFacade.findAll();
-//        for(Course course : courses) {
-//            List<course.getStudentList();
-//        }
+
         return relationsAsList = new ArrayList<>(relationsMap.entrySet());
     }
     

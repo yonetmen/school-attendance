@@ -2,6 +2,7 @@ package com.plusnet.facade;
 
 import com.plusnet.entity.Course;
 import com.plusnet.entity.Student;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -35,5 +36,15 @@ public class StudentFacade extends AbstractFacade<Student> {
         Student student = em.find(Student.class, studentId);
         Course course = em.find(Course.class, courseId);
         return student.getCourseList().add(course);
+    }
+    
+    public List<Course> getCourseList(int studentId) {
+        Query query = em.createNativeQuery("SELECT c.COURSE_NAME " +
+                                            "FROM  course c " +
+                                            "JOIN student_has_course shc ON (shc.course_ID = c.ID) " +
+                                            "JOIN student s ON (s.ID = shc.student_ID) " +
+                                            "WHERE s.ID = " + studentId + ";");
+        List<Course> result = (List<Course>) query.getResultList();
+        return result;
     }
 }

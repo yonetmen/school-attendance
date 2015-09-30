@@ -103,34 +103,60 @@
             </p:layoutUnit>
 
             <!-- Update Student Modal -->
-            <p:dialog id="update" closable="false" header="Updatera Student" widgetVar="update" modal="true" width="300" height="350" visible="#{facesContext.validationFailed}">
+            <p:dialog id="update" closable="false" header="Updatera Student" widgetVar="update" modal="true" width="440" height="100%" visible="#{facesContext.validationFailed}">
                 <h:form id="updateForm">   
                     <h:outputText value="Förnamn" styleClass="form_label"/><h:message for="f_name" styleClass="error"/>
-                    <br><p:inputText style="margin: auto; width: 95%" id="f_name" value="#{studentManagedBean.student.firstName}"/></br>
+                    <br><p:inputText style="margin: auto; width: 98%" id="f_name" value="#{studentManagedBean.student.firstName}"/></br>
 
                     <h:outputText value="Efternamn" styleClass="form_label"/><h:message for="l_name" styleClass="error" />
-                    <br><p:inputText style="margin: auto; width: 95%" id="l_name" value="#{studentManagedBean.student.lastName}"/></br>
+                    <br><p:inputText style="margin: auto; width: 98%" id="l_name" value="#{studentManagedBean.student.lastName}"/></br>
 
                     <h:outputText value="Telefon" styleClass="form_label"/><h:message for="t_number" styleClass="error" />
-                    <br><p:inputText style="margin: auto; width: 95%" id="t_number" value="#{studentManagedBean.student.phoneNumber}"/></br>
+                    <br><p:inputText style="margin: auto; width: 98%" id="t_number" value="#{studentManagedBean.student.phoneNumber}"/></br>
 
                     <h:outputText value="Adress" styleClass="form_label"/><h:message for="addres" styleClass="error" />
-                    <br><p:inputText style="margin: auto; width: 95%" id="addres" value="#{studentManagedBean.student.address}"/></br>
+                    <br><p:inputText style="margin: auto; width: 98%" id="addres" value="#{studentManagedBean.student.address}"/></br>
 
                     <h:outputText value="Email" styleClass="form_label"/><h:message for="e-mail" styleClass="error" />
-                    <br><p:inputText style="margin: auto; width: 95%" id="e-mail" value="#{studentManagedBean.student.email}"/></br>
+                    <br><p:inputText style="margin: auto; width: 98%" id="e-mail" value="#{studentManagedBean.student.email}"/></br>
 
                     <h:outputText value="Start Date" styleClass="form_label"/><h:message for="startdate" styleClass="error" /><br/>
-                    <p:inputText id="startdate" style="margin: auto; width: 95%" disabled="true" value="#{studentManagedBean.student.startDate}" >
+                    <p:inputText id="startdate" style="margin: auto; width: 98%" disabled="true" value="#{studentManagedBean.student.startDate}" >
                         <f:convertDateTime pattern="yyyy-MM-dd"/>
-                    </p:inputText><br/>
+                    </p:inputText><br/><br/>
+                    
+                    <!-- STUDENT'S COURSE LIST -->
+                    <h:outputText value="Kurs List" style="font-size: 18px;"/>
+                    <p:commandLink value="Lägg till" style="color: yellowgreen; float: right; font-weight: bold;"  />
+                    
+                    <p:dataTable id="dataTable" value="#{studentManagedBean.getCourseListByStudentId(studentManagedBean.student.id)}" var="course">
+
+                        <p:column>
+                            <f:facet name="header">Kurs namn</f:facet>
+                            <p:outputLabel value="#{course}"/>
+                        </p:column>
+
+                        <p:column style="width: 25px">
+                            <f:facet name="header">Edit</f:facet>
+                            <p:commandLink value="edit" type="button" 
+                                           action="#{studentManagedBean.setStudent(std)}"
+                                           update=":update" oncomplete="PF('update').show();"/>
+                        </p:column>
+
+                        <p:column style="width: 55px; text-align: center">
+                            <f:facet name="header">Ta bort</f:facet>
+                            <p:commandLink value="delete" update="@form" 
+                                           action="#{studentManagedBean.deleteStudent(std)}"/>
+                        </p:column>
+                    </p:dataTable>
+                    
+                    
 
                     <br><p:commandButton id="updateButton" value="Updatera" update=":tableForm:dataTable" 
                                          action="#{studentManagedBean.editStudent(std)}"  style="width: 100%"
                                          onclick="if (args &amp; &amp; !args.validationFailed) editDialog.hide()" /></br>
                 </h:form>
             </p:dialog>
-
 
             <!-- Student Details Modal-->
             <p:dialog id="info" closable="false" header="Student detaljer" widgetVar="info" modal="true" width="400" height="300">
