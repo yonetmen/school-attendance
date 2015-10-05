@@ -58,36 +58,30 @@ public class StudentFacade extends AbstractFacade<Student> {
     }
 
     // Add selected courses from "pick list" into Student's course list.
-    // Adding Student and Course List working but removing not working
     public void addToStudentsCourseList(int studentId, List<Course> courseList) {
+        dropAllCoursesByStudentId(studentId);
         Student student = em.find(Student.class, studentId);
         for (Course course : courseList) {
-            if (!student.getCourseList().contains(course)) {
-                student.getCourseList().add(course);
-            }
-            if (!course.getStudentList().contains(student)) {
-                course.getStudentList().add(student);
-            }
+            student.getCourseList().add(course);
+            course.getStudentList().add(student);
             em.merge(course);
             em.merge(student);
         }
     }
 
     public List<Course> getCourseListByStudentId(int studentId) {
-        List<Course> cList = new ArrayList<>();
+        List<Course> courseList = new ArrayList<>();
         Query query = em.createNativeQuery("SELECT c.* "
                 + "FROM  course c "
                 + "JOIN student_has_course shc ON (shc.course_ID = c.ID) "
                 + "JOIN student s ON (s.ID = shc.student_ID) "
                 + "WHERE s.ID = " + studentId + ";");
-
         List<Object[]> courseArray = (List<Object[]>) query.getResultList();
-
         for (Object[] courseFields : courseArray) {
             Course c = em.find(Course.class, courseFields[0]);
-            cList.add(c);
+            courseList.add(c);
         }
-        return cList;
+        return courseList;
     }
 
     public List<Course> findAvailableCoursesForStudent(int studentId) {
@@ -125,5 +119,12 @@ public class StudentFacade extends AbstractFacade<Student> {
         student.setPhoneNumber(domain.getPhone());
         student.setStartDate(domain.getStartDate());
         return student;
+    }
+
+    private void dropAllCoursesByStudentId(int studentId) {
+        Query query = em.createNativeQuery("delete shc "
+                + "FROM  student_has_course shc "
+                + "WHERE shc.student_ID = " + studentId + ";");
+        query.executeUpdate();
     }
 }
