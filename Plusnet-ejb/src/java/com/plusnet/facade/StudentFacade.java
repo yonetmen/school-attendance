@@ -15,9 +15,8 @@ public class StudentFacade extends AbstractFacade<Student> {
 
     @PersistenceContext
     private EntityManager em;
-    
-//    List<Course> courseList;
 
+//    List<Course> courseList;
     @Override
     protected EntityManager getEntityManager() {
         return em;
@@ -59,15 +58,21 @@ public class StudentFacade extends AbstractFacade<Student> {
     }
 
     // Add selected courses from "pick list" into Student's course list.
+    // Adding Student and Course List working but removing not working
     public void addToStudentsCourseList(int studentId, List<Course> courseList) {
         Student student = em.find(Student.class, studentId);
-        for(Course course : courseList) {
-            student.getCourseList().add(course);
-            course.getStudentList().add(student);
+        for (Course course : courseList) {
+            if (!student.getCourseList().contains(course)) {
+                student.getCourseList().add(course);
+            }
+            if (!course.getStudentList().contains(student)) {
+                course.getStudentList().add(student);
+            }
+            em.merge(course);
+            em.merge(student);
         }
     }
 
-    
     public List<Course> getCourseListByStudentId(int studentId) {
         List<Course> cList = new ArrayList<>();
         Query query = em.createNativeQuery("SELECT c.* "
@@ -75,18 +80,21 @@ public class StudentFacade extends AbstractFacade<Student> {
                 + "JOIN student_has_course shc ON (shc.course_ID = c.ID) "
                 + "JOIN student s ON (s.ID = shc.student_ID) "
                 + "WHERE s.ID = " + studentId + ";");
-        
+
         List<Object[]> courseArray = (List<Object[]>) query.getResultList();
-        for(Object[] courseFields : courseArray) {
+
+        for (Object[] courseFields : courseArray) {
             Course c = em.find(Course.class, courseFields[0]);
             cList.add(c);
         }
         return cList;
     }
-    
+
     public List<Course> findAvailableCoursesForStudent(int studentId) {
-        Query query = em.createNamedQuery("Course.findAll", Course.class);
+        Query query = em.createNamedQuery("Course.findAll", Course.class
+        );
         List<Course> allCourses = (List<Course>) query.getResultList();
+
         allCourses.removeAll(getCourseListByStudentId(studentId));
         return allCourses;
     }
