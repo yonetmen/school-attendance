@@ -5,6 +5,7 @@ import java.util.List;
 
 public class StudentDomain {
     
+    private int id;
     private String firstName;
     private String lastName;
     private String email;
@@ -13,6 +14,14 @@ public class StudentDomain {
     private Date startDate;
     private List<CourseDomain> courseList;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public String getFirstName() {
         return firstName;
     }
