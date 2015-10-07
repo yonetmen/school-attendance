@@ -1,9 +1,10 @@
 package com.plusnet.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class StudentDomain {
+public class StudentDomain implements Serializable {
     
     private int id;
     private String firstName;
@@ -13,6 +14,7 @@ public class StudentDomain {
     private String phone;
     private Date startDate;
     private List<CourseDomain> courseList;
+    private List<AttendanceDomain> attendanceList;
 
     public int getId() {
         return id;
@@ -76,5 +78,13 @@ public class StudentDomain {
 
     public void setCourseList(List<CourseDomain> courseList) {
         this.courseList = courseList;
+    }
+
+    public List<AttendanceDomain> getAttendanceList() {
+        return attendanceList;
+    }
+
+    public void setAttendanceList(List<AttendanceDomain> attendanceList) {
+        this.attendanceList = attendanceList;
     }
 }

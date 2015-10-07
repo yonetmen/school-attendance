@@ -84,7 +84,7 @@ public class Student implements Serializable {
     @ManyToMany(mappedBy = "studentList")
     private List<Course> courseList;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentID")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "student")
     private List<Attendance> attendanceList;
 
     public Student() {

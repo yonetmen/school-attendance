@@ -7,75 +7,83 @@
       xmlns:p="http://primefaces.org/ui">
 
     <h:head>
-        <title>Facelet Title</title>
+        <title>Närvaro Lista</title>
     </h:head>
     <h:body>
         <ui:include src="header.xhtml"/><br></br>
-        <h:form>
-            <p:growl id="messages" showDetail="true" />
 
-            <h:panelGrid columnClasses="value" style="margin: auto;">
-                <p:schedule id="schedule" value="#{scheduleView.eventModel}" widgetVar="myschedule" timeZone="GMT+2">
-
-                    <p:ajax event="dateSelect" listener="#{scheduleView.onDateSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
-                    <p:ajax event="eventSelect" listener="#{scheduleView.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
-                    <p:ajax event="eventMove" listener="#{scheduleView.onEventMove}" update="messages" />
-                    <p:ajax event="eventResize" listener="#{scheduleView.onEventResize}" update="messages" />
-
-                </p:schedule>
-            </h:panelGrid>
-
-            <p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">
-                <h:panelGrid id="eventDetails" columns="2">
-                    <p:outputLabel for="title" value="Titles:" />
-                    <p:inputText id="title" value="#{scheduleView.event.title}" required="true" />
-
-                    <p:outputLabel for="from" value="From:" />
-                    <p:calendar id="from" value="#{scheduleView.event.startDate}" timeZone="GMT+2" pattern="dd/MM/yyyy HH:mm"/>
-
-                    <p:outputLabel for="to" value="To:" />
-                    <p:calendar id="to" value="#{scheduleView.event.endDate}" timeZone="GMT+2" pattern="dd/MM/yyyy HH:mm"/>
-
-                    <p:outputLabel for="allDay" value="All Day:" />
-                    <h:selectBooleanCheckbox id="allDay" value="#{scheduleView.event.allDay}" />
-
-                    <p:commandButton type="reset" value="Reset" />
-                    <p:commandButton id="addButton" value="Save" actionListener="#{scheduleView.addEvent}" oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+        <h:form id="form" style="width: 900px; margin: auto">
+            <p:panel id="panel" header="Närvaro Lista. Var god och välja en kurs" style="margin-bottom:20px;">
+                <h:panelGrid columns="4" cellpadding="5" style="margin: auto;">
+                    <h:outputLabel for="course_name" value="Välj en kurs: *" />
+                    <h:selectOneMenu id="course_name" value="#{attendanceManagedBean.courseName}" required="true" label="Kursnamn">
+                        <f:selectItem itemLabel="Välj här" itemValue="" noSelectionOption="true" />
+                        <f:selectItem itemLabel="Javautvecklare" itemValue="Javautvecklare" />
+                        <f:selectItem itemLabel="Sharepoint utvecklare" itemValue="Sharepoint utvecklare" />
+                        <f:selectItem itemLabel="Automationsingenjör" itemValue="Automationsingenjör" />
+                        <f:selectItem itemLabel="Agil projektledare" itemValue="Agil projektledare" />
+                        <f:selectItem itemLabel="Drift- &amp; fastighetstekniker" itemValue="Drift- &amp; fastighetstekniker" />
+                        <f:selectItem itemLabel="Kvalitetssäkrare och testare inom IT" itemValue="Kvalitetssäkrare och testare inom IT" />
+                        <f:selectItem itemLabel="Systemutvecklare .NET" itemValue="Systemutvecklare .NET" />
+                        <f:selectItem itemLabel="Verktygsmakare" itemValue="Verktygsmakare" />
+                    </h:selectOneMenu>
+                    <p:commandButton update="@form"  action="#{attendanceManagedBean.getStudentsByCourseName()}" value="Visa Studenter" />
                 </h:panelGrid>
-            </p:dialog>    
+            </p:panel>
+
+
+            <p:dataTable id="checkbox" var="studentDomain" value="#{attendanceManagedBean.studentListByCourseName}" selection="#{attendanceManagedBean.attendants}" rowKey="#{studentDomain.id}" style="margin-bottom:20px;">
+                <f:facet name="header">
+                    Student List
+                </f:facet>
+                <p:column selectionMode="multiple" style="width: 16px; text-align:center;"/>
+                <p:column headerText="Förstnamn">
+                    <h:outputText value="#{studentDomain.firstName}" />
+                </p:column>
+                <p:column headerText="Efternamn">
+                    <h:outputText value="#{studentDomain.lastName}" />
+                </p:column>
+                <p:column headerText="Email">
+                    <h:outputText value="#{studentDomain.email}" />
+                </p:column>
+                <f:facet name="footer">
+                    <p:commandButton actionListener="#{attendanceManagedBean.dateControlForCourse()}" resetValues="true"
+                                     update="@form" icon="ui-icon-disk" value="Spara" />
+                </f:facet>
+            </p:dataTable>
+
+            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+
+
+
+            <p:dataTable id="attendanceLista" rendered="#{not empty attendanceManagedBean.jmsContent}" 
+                         var="attendant" value="#{attendanceManagedBean.jmsContent}" style="margin-bottom: 50px !important;">
+                <f:facet name="header">
+                    Närvaro lista för studenter
+                </f:facet>
+                <p:column headerText="Student Namn">
+                    <h:outputText value="#{attendant.studentName}" />
+                </p:column>
+                <p:column headerText="Email">
+                    <h:outputText value="#{attendant.studentEmail}" />
+                </p:column>
+                <p:column headerText="Kursnamn" style="width: 250px;">
+                    <h:outputText value="#{attendant.courseName}" />
+                </p:column>
+                <p:column headerText="Datum" style="width: 90px;">
+                    <h:outputText value="#{attendant.date}" >
+                        <f:convertDateTime pattern="yyyy-MM-dd"/>
+                    </h:outputText>
+                </p:column>
+                
+                <f:facet name="footer">
+                    <p:commandButton action="#{attendanceManagedBean.sendJMS()}" 
+                                     update="@form" icon="ui-icon-mail-closed" value="Skicka Rapport" 
+                                     style="margin-left: 20px;"/>
+                </f:facet>
+            </p:dataTable>
+
         </h:form>
-
-        <script type="text/javascript">
-            PrimeFaces.locales['tr'] = {
-                closeText: 'kapat',
-                prevText: 'geri',
-                nextText: 'ileri',
-                currentText: 'bugün',
-                monthNames: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
-                    'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'],
-                monthNamesShort: ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz',
-                    'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'],
-                dayNames: ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'],
-                dayNamesShort: ['Pz', 'Pt', 'Sa', 'Ça', 'Pe', 'Cu', 'Ct'],
-                dayNamesMin: ['Pz', 'Pt', 'Sa', 'Ça', 'Pe', 'Cu', 'Ct'],
-                weekHeader: 'Hf',
-                firstDay: 1,
-                isRTL: false,
-                showMonthAfterYear: false,
-                yearSuffix: '',
-                month: 'Ay',
-                week: 'Hafta',
-                day: 'Gün',
-                allDayText: 'Tüm Gün'
-            };
-        </script>
-        <style type="text/css">
-            .value {
-                width: 1000px;
-            }
-        </style>
-
-
     </h:body>
 </html>
 

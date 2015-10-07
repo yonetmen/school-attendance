@@ -16,7 +16,6 @@ public class StudentFacade extends AbstractFacade<Student> {
     @PersistenceContext
     private EntityManager em;
 
-//    List<Course> courseList;
     @Override
     protected EntityManager getEntityManager() {
         return em;
@@ -24,7 +23,6 @@ public class StudentFacade extends AbstractFacade<Student> {
 
     public StudentFacade() {
         super(Student.class);
-//        courseList = new ArrayList<>();
     }
 
     public void create(StudentDomain std) {
@@ -93,6 +91,42 @@ public class StudentFacade extends AbstractFacade<Student> {
         return allCourses;
     }
 
+    private void dropAllCoursesByStudentId(int studentId) {
+        Query query = em.createNativeQuery("delete shc "
+                + "FROM  student_has_course shc "
+                + "WHERE shc.student_ID = " + studentId + ";");
+        query.executeUpdate();
+    }
+
+    public List<StudentDomain> getStudentListByCourseName(String courseName) {
+        List<Student> studentList = new ArrayList<>();
+        Query query = em.createNativeQuery("SELECT  s.* "
+                + "FROM student s "
+                + "JOIN student_has_course shc ON (s.ID = shc.student_ID) "
+                + "JOIN course c ON (shc.course_ID = c.ID) "
+                + "where c.COURSE_NAME = '" + courseName + "';");
+
+        List<Object[]> studentArray = (List<Object[]>) query.getResultList();
+        for (Object[] students : studentArray) {
+            Student s = em.find(Student.class, students[0]);
+            studentList.add(s);
+        }
+        List<StudentDomain> studentDomainList = convertEntityListToDomainList(studentList);
+        return studentDomainList;
+    }
+
+    public List<StudentDomain> getStudentListById(List<Integer> studentListSendToRektor) {
+        List<Student> studentList = new ArrayList<>(studentListSendToRektor.size());
+        for (int studentId : studentListSendToRektor) {
+            Query query = em.createNamedQuery("Student.findById", Student.class);
+            query.setParameter("id", studentId);
+            Student student = (Student) query.getSingleResult();
+            studentList.add(student);
+        }
+        List<StudentDomain> studentDomainList = convertEntityListToDomainList(studentList);
+        return studentDomainList;
+    }
+
     private List<StudentDomain> convertEntityListToDomainList(List<Student> all) {
         List<StudentDomain> list = new ArrayList<>();
         all.stream().forEach((std) -> {
@@ -119,12 +153,5 @@ public class StudentFacade extends AbstractFacade<Student> {
         student.setPhoneNumber(domain.getPhone());
         student.setStartDate(domain.getStartDate());
         return student;
-    }
-
-    private void dropAllCoursesByStudentId(int studentId) {
-        Query query = em.createNativeQuery("delete shc "
-                + "FROM  student_has_course shc "
-                + "WHERE shc.student_ID = " + studentId + ";");
-        query.executeUpdate();
     }
 }

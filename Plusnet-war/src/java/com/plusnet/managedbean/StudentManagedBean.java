@@ -13,7 +13,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
 
 @ManagedBean
@@ -32,9 +31,7 @@ public class StudentManagedBean implements Serializable {
     private List<Course> coursesTarget;
     private List<Course> coursesSource;
 
-    public StudentManagedBean() {
-
-    }
+    public StudentManagedBean() {}
 
     @PostConstruct
     public void init() {
@@ -52,66 +49,32 @@ public class StudentManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage("registerForm:email", message);
         }
     }
-
-    public void deleteStudent(int studentId) {
-        studentFacade.removeStudent(studentId);
-    }
-
-//    public void onTransfer(TransferEvent event) throws Exception {
-//        if (event != null) {
-//            
-//            
-//            
-//            
-//            // Gets all course in target pickList.
-//            List<String> coursesNames = (List<String>) event.getItems();
-//            for (String name : coursesNames) {
-//                Course course = courseFacade.findByName(name);
-//                coursesTarget.add(course);
-//            }
-//        }
-//    }
+    
     public void editStudent() {
-
         List<String> selectedCourseNames = courses.getTarget();
         List<Course> selectedCourses = new ArrayList<>(selectedCourseNames.size());
         for (String courseName : selectedCourseNames) {
             Course course = courseFacade.findByName(courseName);
             selectedCourses.add(course);
         }
-
-        // Convert target course list from String to CourseList objects
-//        List<Course> selectedCourses = convertFromStringToObject();
-        // Set all target courses from PickList into Student.
         studentFacade.addToStudentsCourseList(studentDomain.getId(), selectedCourses);
-
         studentFacade.editStudent(studentDomain);
         studentDomain = new StudentDomain();
     }
 
-//    private List<Course> convertFromStringToObject() {
-//        List<String> selectedCourseNames = courses.getTarget();
-//        List<Course> selectedCourses = new ArrayList<>(selectedCourseNames.size());
-//        for (String courseName : selectedCourseNames) {
-//            Course course = courseFacade.findByName(courseName);
-//            selectedCourses.add(course);
-//        }
-//        return selectedCourses;
-//    }
+    public void deleteStudent(int studentId) {
+        studentFacade.removeStudent(studentId);
+    }
     
     public void getDualListModelForStudent(StudentDomain std) {
+        setStudentDomain(std);
         if (std != null) {
-            setStudentDomain(std);
-            
             // Get participated course list for selected student
             coursesTarget = studentFacade.getCourseListByStudentId(studentDomain.getId());
-
             // Get Available course list for selected student by id
             coursesSource = studentFacade.findAvailableCoursesForStudent(studentDomain.getId());
-
             List<String> sourceCourseNames = getCourseNames(coursesSource);
             List<String> targetCourseNames = getCourseNames(coursesTarget);
-
             courses = new DualListModel<>(sourceCourseNames, targetCourseNames);
         }
     }

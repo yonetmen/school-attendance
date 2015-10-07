@@ -48,7 +48,7 @@ public class Attendance implements Serializable {
     
     @JoinColumn(name = "student_ID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
-    private Student studentID;
+    private Student student;
 
     public Attendance() {
     }
@@ -87,12 +87,12 @@ public class Attendance implements Serializable {
         this.recordDate = recordDate;
     }
 
-    public Student getStudentID() {
-        return studentID;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setStudentID(Student studentID) {
-        this.studentID = studentID;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     @Override

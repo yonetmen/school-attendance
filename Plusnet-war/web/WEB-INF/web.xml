@@ -21,14 +21,24 @@
     <welcome-file-list>
         <welcome-file>faces/login.xhtml</welcome-file>
     </welcome-file-list>
-    
     <context-param>
         <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
         <param-value>true</param-value>
     </context-param>
-    
     <context-param>
         <param-name>primefaces.THEME</param-name>
         <param-value>hot-sneaks</param-value>
     </context-param>
+    <resource-ref>
+        <res-ref-name>jms/myQueueConnectionFactory</res-ref-name>
+        <res-type>javax.jms.ConnectionFactory</res-type>
+        <res-auth>Container</res-auth>
+        <res-sharing-scope>Shareable</res-sharing-scope>
+    </resource-ref>
+    <message-destination-ref>
+        <message-destination-ref-name>jms/myQueue</message-destination-ref-name>
+        <message-destination-type>javax.jms.Queue</message-destination-type>
+        <message-destination-usage>Produces</message-destination-usage>
+        <message-destination-link>jms/myQueue</message-destination-link>
+    </message-destination-ref>
 </web-app>

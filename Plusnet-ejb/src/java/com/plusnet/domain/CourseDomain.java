@@ -4,12 +4,21 @@ import java.util.List;
 
 public class CourseDomain {
     
+    private int id;
     private String name;
     private String code;
     private String language;
     private String level;
     private String responsible;
     private List<StudentDomain> studentList;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
