@@ -49,6 +49,7 @@ public class AttendanceFacade extends AbstractFacade<Attendance> {
         Attendance att = new Attendance();
         att.setIsAttended(attendance.getAttended());
         att.setRecordDate(attendance.getRecordDate());
+        att.setCourseName(attendance.getCourseName());
         Student std = studentFacade.convertDomainToEntity(attendance.getStudentDomain());
         att.setStudent(std);
         em.persist(att);
@@ -60,5 +61,19 @@ public class AttendanceFacade extends AbstractFacade<Attendance> {
 
     public void setStudentFacade(StudentFacade studentFacade) {
         this.studentFacade = studentFacade;
+    }
+
+    public boolean getCourseNameByStudentId(int studentId, String courseName) {
+        Query query = em.createNamedQuery("Attendance.findByCourseName", Attendance.class);
+        query.setParameter("courseName", courseName);
+        List<Attendance> resultList = (List<Attendance>) query.getResultList();
+        
+        for(Attendance att : resultList) {
+            int id = att.getStudent().getId();
+            if(id == studentId) {
+                return true;
+            }
+        }
+        return false;
     }
 }

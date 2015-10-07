@@ -11,6 +11,7 @@ public class AttendanceDomain {
     private int id;
     private short attended;
     private Date recordDate;
+    private String courseName;
     private StudentDomain studentDomain;
 
     public int getId() {
@@ -31,6 +32,14 @@ public class AttendanceDomain {
 
     public void setRecordDate(Date recordDate) {
         this.recordDate = recordDate;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public String getCourseName() {
+        return courseName;
     }
 
     public StudentDomain getStudentDomain() {

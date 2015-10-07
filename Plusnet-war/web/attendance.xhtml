@@ -57,7 +57,7 @@
 
 
             <p:dataTable id="attendanceLista" rendered="#{not empty attendanceManagedBean.jmsContent}" 
-                         var="attendant" value="#{attendanceManagedBean.jmsContent}" style="margin-bottom: 50px !important;">
+                         var="attendant" value="#{attendanceManagedBean.jmsContent}" style="margin-bottom: 30px !important;">
                 <f:facet name="header">
                     Närvaro lista för studenter
                 </f:facet>
@@ -78,8 +78,7 @@
                 
                 <f:facet name="footer">
                     <p:commandButton action="#{attendanceManagedBean.sendJMS()}" 
-                                     update="@form" icon="ui-icon-mail-closed" value="Skicka Rapport" 
-                                     style="margin-left: 20px;"/>
+                                     update="@form" icon="ui-icon-mail-closed" value="Skicka Rapport" />
                 </f:facet>
             </p:dataTable>
 

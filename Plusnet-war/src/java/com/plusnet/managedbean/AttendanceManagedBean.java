@@ -57,17 +57,18 @@ public class AttendanceManagedBean implements Serializable {
         studentIds = attendanceFacade.getStudentIdsByAttendanceDate(date);
         if (!attendants.isEmpty()) {
             for (StudentDomain sd : attendants) {
-//                if (!studentIds.contains(sd.getId())) {
+                if (studentIds.contains(sd.getId()) && !attendanceFacade.getCourseNameByStudentId(sd.getId(), courseName)) {
                     studentListSendToRektor.add(sd.getId());
                     AttendanceDomain attendance = new AttendanceDomain();
                     attendance.setAttended((short) 1);
                     attendance.setRecordDate(date);
                     attendance.setStudentDomain(sd);
+                    attendance.setCourseName(courseName);
                     attendanceFacade.createAttendance(attendance);
                     JmsContent item = new JmsContent(sd.getFirstName() + " " + sd.getLastName(),
                                                     sd.getEmail(), date, courseName);
                     jmsContent.add(item);
-//                }
+                }
             }
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_INFO, courseName, "Närvaro lista sparats"));

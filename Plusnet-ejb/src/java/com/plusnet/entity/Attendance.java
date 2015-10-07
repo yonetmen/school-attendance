@@ -25,7 +25,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Attendance.findAll", query = "SELECT a FROM Attendance a"),
     @NamedQuery(name = "Attendance.findById", query = "SELECT a FROM Attendance a WHERE a.id = :id"),
     @NamedQuery(name = "Attendance.findByIsAttended", query = "SELECT a FROM Attendance a WHERE a.isAttended = :isAttended"),
-    @NamedQuery(name = "Attendance.findByRecordDate", query = "SELECT a FROM Attendance a WHERE a.recordDate = :recordDate")})
+    @NamedQuery(name = "Attendance.findByRecordDate", query = "SELECT a FROM Attendance a WHERE a.recordDate = :recordDate"),
+    @NamedQuery(name = "Attendance.findByCourseName", query = "SELECT a FROM Attendance a WHERE a.courseName = :courseName")})
 public class Attendance implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,6 +46,10 @@ public class Attendance implements Serializable {
     @Column(name = "RECORD_DATE")
     @Temporal(TemporalType.DATE)
     private Date recordDate;
+    
+    @Basic(optional = false)
+    @Column(name = "COURSE_NAME")
+    private String courseName;
     
     @JoinColumn(name = "student_ID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
@@ -93,6 +98,14 @@ public class Attendance implements Serializable {
 
     public void setStudent(Student student) {
         this.student = student;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public String getCourseName() {
+        return courseName;
     }
 
     @Override
