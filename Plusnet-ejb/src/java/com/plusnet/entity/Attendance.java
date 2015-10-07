@@ -48,6 +48,7 @@ public class Attendance implements Serializable {
     private Date recordDate;
     
     @Basic(optional = false)
+    @NotNull
     @Column(name = "COURSE_NAME")
     private String courseName;
     

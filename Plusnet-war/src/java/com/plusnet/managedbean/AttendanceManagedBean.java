@@ -1,6 +1,7 @@
 package com.plusnet.managedbean;
 
 import com.plusnet.domain.AttendanceDomain;
+import com.plusnet.domain.JmsContent;
 import com.plusnet.domain.StudentDomain;
 import com.plusnet.facade.AttendanceFacade;
 import com.plusnet.facade.StudentFacade;
@@ -12,6 +13,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
@@ -27,14 +29,16 @@ public class AttendanceManagedBean implements Serializable {
     private AttendanceFacade attendanceFacade;
     @EJB
     private StudentFacade studentFacade;
+    
+    @ManagedProperty(value = "#{jmsSender}")
+    JmsSenderBean jmsSender;
 
     private StudentDomain studentDomain;
     private List<StudentDomain> attendants;
     private List<StudentDomain> studentListByCourseName;
     private String courseName;
     private List<Integer> studentIds;
-    private List<Integer> studentListSendToRektor;
-    private List<JmsContent> jmsContent;
+    private List<JmsContent> jmsContents;
     private Date date;
 
     public AttendanceManagedBean() {
@@ -43,10 +47,9 @@ public class AttendanceManagedBean implements Serializable {
     @PostConstruct
     public void init() {
         studentIds = new ArrayList<>();
-        studentListSendToRektor = new ArrayList<>();
         date = new Date();
         attendants = new ArrayList<>();
-        jmsContent = new ArrayList<>();
+        jmsContents = new ArrayList<>();
     }
 
     public void getStudentsByCourseName() {
@@ -57,8 +60,7 @@ public class AttendanceManagedBean implements Serializable {
         studentIds = attendanceFacade.getStudentIdsByAttendanceDate(date);
         if (!attendants.isEmpty()) {
             for (StudentDomain sd : attendants) {
-                if (studentIds.contains(sd.getId()) && !attendanceFacade.getCourseNameByStudentId(sd.getId(), courseName)) {
-                    studentListSendToRektor.add(sd.getId());
+                if (!attendanceFacade.getCourseNameByStudentId(sd.getId(), courseName)) {
                     AttendanceDomain attendance = new AttendanceDomain();
                     attendance.setAttended((short) 1);
                     attendance.setRecordDate(date);
@@ -67,7 +69,7 @@ public class AttendanceManagedBean implements Serializable {
                     attendanceFacade.createAttendance(attendance);
                     JmsContent item = new JmsContent(sd.getFirstName() + " " + sd.getLastName(),
                                                     sd.getEmail(), date, courseName);
-                    jmsContent.add(item);
+                    jmsContents.add(item);
                 }
             }
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
@@ -75,11 +77,9 @@ public class AttendanceManagedBean implements Serializable {
         }
     }
     
-    // NOT WORKING
-    public void sendJMS() {
-        JmsSenderBean jms = new JmsSenderBean();
-        StudentDomain std = attendants.get(0);
-        jms.sendJms(std);
+    // Working now
+    public void sendJMS() throws Exception {
+        jmsSender.sendMessage(jmsContents);
     }
 
     // GETTERS & SETTERS //
@@ -131,14 +131,6 @@ public class AttendanceManagedBean implements Serializable {
         this.studentIds = studentIds;
     }
 
-    public List<Integer> getStudentListSendToRektor() {
-        return studentListSendToRektor;
-    }
-
-    public void setStudentListSendToRektor(List<Integer> studentListSendToRektor) {
-        this.studentListSendToRektor = studentListSendToRektor;
-    }
-
     public Date getDate() {
         return date;
     }
@@ -147,61 +139,15 @@ public class AttendanceManagedBean implements Serializable {
         this.date = date;
     }
 
-    public List<JmsContent> getJmsContent() {
-        return jmsContent;
+    public void setJmsSender(JmsSenderBean jmsSender) {
+        this.jmsSender = jmsSender;
     }
 
-    public void setJmsContent(List<JmsContent> jmsContent) {
-        this.jmsContent = jmsContent;
+    public List<JmsContent> getJmsContents() {
+        return jmsContents;
     }
-    
-    public class JmsContent {
-        
-        private String studentName;
-        private String studentEmail;
-        private Date date;
-        private String courseName;
 
-        public JmsContent() {
-        }
-
-        public JmsContent(String studentName, String studentEmail, Date date, String courseName) {
-            this.studentName = studentName;
-            this.studentEmail = studentEmail;
-            this.date = date;
-            this.courseName = courseName;
-        }
-
-        public String getStudentName() {
-            return studentName;
-        }
-
-        public void setStudentName(String studentName) {
-            this.studentName = studentName;
-        }
-
-        public String getStudentEmail() {
-            return studentEmail;
-        }
-
-        public void setStudentEmail(String studentEmail) {
-            this.studentEmail = studentEmail;
-        }
-
-        public Date getDate() {
-            return date;
-        }
-
-        public void setDate(Date date) {
-            this.date = date;
-        }
-
-        public String getCourseName() {
-            return courseName;
-        }
-
-        public void setCourseName(String courseName) {
-            this.courseName = courseName;
-        }    
+    public void setJmsContents(List<JmsContent> jmsContents) {
+        this.jmsContents = jmsContents;
     }
 }
