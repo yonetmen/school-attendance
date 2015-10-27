@@ -31,21 +31,21 @@
                 </h:panelGrid>
             </p:panel>
 
+            <p:dataTable id="checkbox" var="student" value="#{attendanceManagedBean.studentListByCourseName}" 
+                         selection="#{attendanceManagedBean.attendants}" rowKey="#{student.id}" style="margin-bottom:20px;">
 
-            <p:dataTable id="checkbox" var="studentDomain" value="#{attendanceManagedBean.studentListByCourseName}" 
-                         selection="#{attendanceManagedBean.attendants}" rowKey="#{studentDomain.id}" style="margin-bottom: 20px;">
                 <f:facet name="header">
                     Student List
                 </f:facet>
                 <p:column selectionMode="multiple" style="width: 16px; text-align:center;"/>
                 <p:column headerText="Förstnamn">
-                    <h:outputText value="#{studentDomain.firstName}" />
+                    <h:outputText value="#{student.firstName}" />
                 </p:column>
                 <p:column headerText="Efternamn">
-                    <h:outputText value="#{studentDomain.lastName}" />
+                    <h:outputText value="#{student.lastName}" />
                 </p:column>
                 <p:column headerText="Email">
-                    <h:outputText value="#{studentDomain.email}" />
+                    <h:outputText value="#{student.email}" />
                 </p:column>
                 <f:facet name="footer">
                     <p:commandButton actionListener="#{attendanceManagedBean.dateControlForCourse()}" resetValues="true"
@@ -54,8 +54,6 @@
             </p:dataTable>
 
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-
-
 
             <p:dataTable id="attendanceLista" rendered="#{not empty attendanceManagedBean.jmsContents}" 
                          var="attendant" value="#{attendanceManagedBean.jmsContents}" style="margin-bottom: 30px !important;">
@@ -76,7 +74,7 @@
                         <f:convertDateTime pattern="yyyy-MM-dd"/>
                     </h:outputText>
                 </p:column>
-                
+
                 <f:facet name="footer">
                     <p:commandButton action="#{attendanceManagedBean.sendJMS()}" 
                                      update="@form" icon="ui-icon-mail-closed" value="Skicka Rapport" />

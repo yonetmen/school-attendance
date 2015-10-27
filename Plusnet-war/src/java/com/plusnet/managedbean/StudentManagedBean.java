@@ -1,7 +1,7 @@
 package com.plusnet.managedbean;
 
-import com.plusnet.domain.StudentDomain;
 import com.plusnet.entity.Course;
+import com.plusnet.entity.Student;
 import com.plusnet.facade.CourseFacade;
 import com.plusnet.facade.StudentFacade;
 import java.io.Serializable;
@@ -9,10 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 import org.primefaces.model.DualListModel;
 
 @ManagedBean
@@ -23,56 +21,35 @@ public class StudentManagedBean implements Serializable {
     private StudentFacade studentFacade;
     @EJB
     private CourseFacade courseFacade;
-    private StudentDomain studentDomain;
-    private List<StudentDomain> studentDomainList;
-
+    private Student student;
+    private List<Student> studentList;
+    
     // Student Edit : Course Pick List
     private DualListModel<String> courses;
     private List<Course> coursesTarget;
     private List<Course> coursesSource;
 
-    public StudentManagedBean() {}
+    public StudentManagedBean() {
+    }
 
     @PostConstruct
     public void init() {
-        studentDomain = new StudentDomain();
+        student = new Student();
         courses = new DualListModel<>();
     }
 
     public void createStudent() {
-        try {
-            studentFacade.create(studentDomain);
-            studentDomain = new StudentDomain();
-        } catch (Exception e) {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    null, " (Email finns i vårt system.)");
-            FacesContext.getCurrentInstance().addMessage("registerForm:email", message);
-        }
-    }
-    
-    public void editStudent() {
-        List<String> selectedCourseNames = courses.getTarget();
-        List<Course> selectedCourses = new ArrayList<>(selectedCourseNames.size());
-        for (String courseName : selectedCourseNames) {
-            Course course = courseFacade.findByName(courseName);
-            selectedCourses.add(course);
-        }
-        studentFacade.addToStudentsCourseList(studentDomain.getId(), selectedCourses);
-        studentFacade.editStudent(studentDomain);
-        studentDomain = new StudentDomain();
+        studentFacade.create(student);
+        student = new Student();
     }
 
-    public void deleteStudent(int studentId) {
-        studentFacade.removeStudent(studentId);
-    }
-    
-    public void getDualListModelForStudent(StudentDomain std) {
-        setStudentDomain(std);
+    public void getDualListModelForStudent(Student std) {
         if (std != null) {
+            student = std;
             // Get participated course list for selected student
-            coursesTarget = studentFacade.getCourseListByStudentId(studentDomain.getId());
+            coursesTarget = studentFacade.find(std.getId()).getCourseList();
             // Get Available course list for selected student by id
-            coursesSource = studentFacade.findAvailableCoursesForStudent(studentDomain.getId());
+            coursesSource = studentFacade.findAvailableCoursesForStudent(std.getId());
             List<String> sourceCourseNames = getCourseNames(coursesSource);
             List<String> targetCourseNames = getCourseNames(coursesTarget);
             courses = new DualListModel<>(sourceCourseNames, targetCourseNames);
@@ -83,9 +60,29 @@ public class StudentManagedBean implements Serializable {
         List<String> names = new ArrayList<>();
         for (Course course : courseList) {
             String name = course.getCourseName();
-            names.add(name);
+            if (!names.contains(name)) {
+                names.add(name);
+            }
         }
         return names;
+    }
+
+    public void updateStudent() {
+        List<String> selectedCourseNames = courses.getTarget();
+        List<Course> selectedCourses = new ArrayList<>();
+        for (String courseName : selectedCourseNames) {
+            Course course = courseFacade.findByName(courseName);
+            if (!coursesTarget.contains(course)) {
+                selectedCourses.add(course);
+            }
+        }
+        studentFacade.addToStudentsCourseList(student.getId(), selectedCourses);
+        studentFacade.edit(student);
+        student = new Student();
+    }
+
+    public void deleteStudent(Student student) {
+        studentFacade.remove(student);
     }
 
     public int studentCount() {
@@ -98,26 +95,18 @@ public class StudentManagedBean implements Serializable {
 
     // Showing courselist for selected Student in "Student Details" dialog.
     public List<Course> getCourseListByStudentId(int studentId) {
-        return studentFacade.getCourseListByStudentId(studentId);
+        return studentFacade.findCourseListByStudentId(studentId);
     }
 
-    public List<StudentDomain> getStudents() {
-        return studentDomainList = studentFacade.findAllStudents();
+    public List<Student> getStudents() {
+        return studentList = studentFacade.findAll();
     }
 
     public void closePopup() {
-        studentDomain = new StudentDomain();
+        student = new Student();
     }
 
     // GETTER AND SETTER //
-    public StudentDomain getStudentDomain() {
-        return studentDomain;
-    }
-
-    public void setStudentDomain(StudentDomain studentDomain) {
-        this.studentDomain = studentDomain;
-    }
-
     public DualListModel<String> getCourses() {
         return courses;
     }
@@ -150,12 +139,20 @@ public class StudentManagedBean implements Serializable {
         this.coursesSource = coursesSource;
     }
 
-    public List<StudentDomain> getStudentDomainList() {
-        return studentDomainList;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setStudentDomainList(List<StudentDomain> studentDomainList) {
-        this.studentDomainList = studentDomainList;
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public List<Student> getStudentList() {
+        return studentList;
+    }
+
+    public void setStudentList(List<Student> studentList) {
+        this.studentList = studentList;
     }
 
     public StudentFacade getStudentFacade() {

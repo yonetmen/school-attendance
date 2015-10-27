@@ -1,6 +1,5 @@
 package com.plusnet.mdb;
 
-import com.plusnet.domain.JmsContent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.ActivationConfigProperty;
@@ -20,7 +19,8 @@ import javax.jms.ObjectMessage;
 })
 public class JmsReceiver implements MessageListener {
 
-    public JmsReceiver() {}
+    public JmsReceiver() {
+    }
 
     @Override
     public void onMessage(Message message) {
@@ -29,8 +29,8 @@ public class JmsReceiver implements MessageListener {
             ObjectMessage objMessage = (ObjectMessage) message;
 
             listData = (ArrayList) objMessage.getObject();
-            
-            for(JmsContent item : listData) {
+
+            for (JmsContent item : listData) {
                 System.out.println("Student Namn: " + item.getStudentName());
                 System.out.println("Kurs Namn: " + item.getCourseName());
                 System.out.println("Datum: " + item.getDate());

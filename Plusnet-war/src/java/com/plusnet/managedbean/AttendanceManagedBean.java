@@ -1,10 +1,10 @@
 package com.plusnet.managedbean;
 
-import com.plusnet.domain.AttendanceDomain;
-import com.plusnet.domain.JmsContent;
-import com.plusnet.domain.StudentDomain;
+import com.plusnet.entity.Attendance;
+import com.plusnet.entity.Student;
 import com.plusnet.facade.AttendanceFacade;
 import com.plusnet.facade.StudentFacade;
+import com.plusnet.mdb.JmsContent;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,9 +33,9 @@ public class AttendanceManagedBean implements Serializable {
     @ManagedProperty(value = "#{jmsSender}")
     JmsSenderBean jmsSender;
 
-    private StudentDomain studentDomain;
-    private List<StudentDomain> attendants;
-    private List<StudentDomain> studentListByCourseName;
+    private Student student;
+    private List<Student> attendants;
+    private List<Student> studentListByCourseName;
     private String courseName;
     private List<Integer> studentIds;
     private List<JmsContent> jmsContents;
@@ -55,18 +55,18 @@ public class AttendanceManagedBean implements Serializable {
     public void getStudentsByCourseName() {
         studentListByCourseName = studentFacade.getStudentListByCourseName(courseName);
     }
-
+    
     public void dateControlForCourse() {
         studentIds = attendanceFacade.getStudentIdsByAttendanceDate(date);
         if (!attendants.isEmpty()) {
-            for (StudentDomain sd : attendants) {
+            for (Student sd : attendants) {
                 if (!attendanceFacade.getCourseNameByStudentId(sd.getId(), courseName)) {
-                    AttendanceDomain attendance = new AttendanceDomain();
-                    attendance.setAttended((short) 1);
+                    Attendance attendance = new Attendance();
+                    attendance.setIsAttended((short) 1);
                     attendance.setRecordDate(date);
-                    attendance.setStudentDomain(sd);
+                    attendance.setStudent(sd);
                     attendance.setCourseName(courseName);
-                    attendanceFacade.createAttendance(attendance);
+                    attendanceFacade.create(attendance);
                     JmsContent item = new JmsContent(sd.getFirstName() + " " + sd.getLastName(),
                                                     sd.getEmail(), date, courseName);
                     jmsContents.add(item);
@@ -77,9 +77,12 @@ public class AttendanceManagedBean implements Serializable {
         }
     }
     
-    // Working now
+    // Sending JMS Messages from WAR project to EBJ project
     public void sendJMS() throws Exception {
         jmsSender.sendMessage(jmsContents);
+        jmsContents = new ArrayList<>();
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_INFO, "Tack!", "Närvaro listan skickats"));
     }
 
     // GETTERS & SETTERS //
@@ -99,27 +102,27 @@ public class AttendanceManagedBean implements Serializable {
         this.courseName = courseName;
     }
 
-    public StudentDomain getStudentDomain() {
-        return studentDomain;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setStudentDomain(StudentDomain studentDomain) {
-        this.studentDomain = studentDomain;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
-    public List<StudentDomain> getAttendants() {
+    public List<Student> getAttendants() {
         return attendants;
     }
 
-    public void setAttendants(List<StudentDomain> attendants) {
+    public void setAttendants(List<Student> attendants) {
         this.attendants = attendants;
     }
 
-    public List<StudentDomain> getStudentListByCourseName() {
+    public List<Student> getStudentListByCourseName() {
         return studentListByCourseName;
     }
 
-    public void setStudentListByCourseName(List<StudentDomain> studentListByCourseName) {
+    public void setStudentListByCourseName(List<Student> studentListByCourseName) {
         this.studentListByCourseName = studentListByCourseName;
     }
 

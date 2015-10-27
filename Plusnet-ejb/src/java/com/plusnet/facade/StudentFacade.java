@@ -1,6 +1,5 @@
 package com.plusnet.facade;
 
-import com.plusnet.domain.StudentDomain;
 import com.plusnet.entity.Course;
 import com.plusnet.entity.Student;
 import java.util.ArrayList;
@@ -25,27 +24,15 @@ public class StudentFacade extends AbstractFacade<Student> {
         super(Student.class);
     }
 
-    public void create(StudentDomain std) {
-        Student student = convertDomainToEntity(std);
-        create(student);
+    public List<Course> findCourseListByStudentId(int studentId) {
+        if(studentId > 0) {
+            Student std = em.find(Student.class, studentId);
+        return std.getCourseList();
+        } 
+        return null;
     }
 
-    public List<StudentDomain> findAllStudents() {
-        List<Student> all = findAll();
-        List<StudentDomain> converted = convertEntityListToDomainList(all);
-        return converted;
-    }
-
-    public void removeStudent(int studentId) {
-        Student std = find(studentId);
-        em.remove(em.merge(std));
-    }
-
-    public void editStudent(StudentDomain student) {
-        Student std = convertDomainToEntity(student);
-        em.merge(std);
-    }
-
+    // This method is not exposed to users
     public long getStudentCountByCourseLanguage(String language) {
         Query query = em.createNativeQuery("SELECT count(*) "
                 + "FROM course AS c "
@@ -67,30 +54,16 @@ public class StudentFacade extends AbstractFacade<Student> {
         }
     }
 
-    public List<Course> getCourseListByStudentId(int studentId) {
-        List<Course> courseList = new ArrayList<>();
-        Query query = em.createNativeQuery("SELECT c.* "
-                + "FROM  course c "
-                + "JOIN student_has_course shc ON (shc.course_ID = c.ID) "
-                + "JOIN student s ON (s.ID = shc.student_ID) "
-                + "WHERE s.ID = " + studentId + ";");
-        List<Object[]> courseArray = (List<Object[]>) query.getResultList();
-        for (Object[] courseFields : courseArray) {
-            Course c = em.find(Course.class, courseFields[0]);
-            courseList.add(c);
-        }
-        return courseList;
-    }
-
     public List<Course> findAvailableCoursesForStudent(int studentId) {
         Query query = em.createNamedQuery("Course.findAll", Course.class
         );
         List<Course> allCourses = (List<Course>) query.getResultList();
 
-        allCourses.removeAll(getCourseListByStudentId(studentId));
+        allCourses.removeAll(em.find(Student.class, studentId).getCourseList());
         return allCourses;
     }
 
+    // This method is not exposed to users
     private void dropAllCoursesByStudentId(int studentId) {
         Query query = em.createNativeQuery("delete shc "
                 + "FROM  student_has_course shc "
@@ -98,7 +71,19 @@ public class StudentFacade extends AbstractFacade<Student> {
         query.executeUpdate();
     }
 
-    public List<StudentDomain> getStudentListByCourseName(String courseName) {
+    public List<Student> getStudentListById(List<Integer> studentListSendToRektor) {
+        List<Student> studentList = new ArrayList<>(studentListSendToRektor.size());
+        for (int studentId : studentListSendToRektor) {
+            Query query = em.createNamedQuery("Student.findById", Student.class);
+            query.setParameter("id", studentId);
+            Student student = (Student) query.getSingleResult();
+            studentList.add(student);
+        }
+        return studentList;
+    }
+    
+    // This method is not exposed to users
+    public List<Student> getStudentListByCourseName(String courseName) {
         List<Student> studentList = new ArrayList<>();
         Query query = em.createNativeQuery("SELECT  s.* "
                 + "FROM student s "
@@ -111,47 +96,6 @@ public class StudentFacade extends AbstractFacade<Student> {
             Student s = em.find(Student.class, students[0]);
             studentList.add(s);
         }
-        List<StudentDomain> studentDomainList = convertEntityListToDomainList(studentList);
-        return studentDomainList;
-    }
-
-    public List<StudentDomain> getStudentListById(List<Integer> studentListSendToRektor) {
-        List<Student> studentList = new ArrayList<>(studentListSendToRektor.size());
-        for (int studentId : studentListSendToRektor) {
-            Query query = em.createNamedQuery("Student.findById", Student.class);
-            query.setParameter("id", studentId);
-            Student student = (Student) query.getSingleResult();
-            studentList.add(student);
-        }
-        List<StudentDomain> studentDomainList = convertEntityListToDomainList(studentList);
-        return studentDomainList;
-    }
-
-    private List<StudentDomain> convertEntityListToDomainList(List<Student> all) {
-        List<StudentDomain> list = new ArrayList<>();
-        all.stream().forEach((std) -> {
-            StudentDomain domain = new StudentDomain();
-            domain.setId(std.getId());
-            domain.setFirstName(std.getFirstName());
-            domain.setLastName(std.getLastName());
-            domain.setEmail(std.getEmail());
-            domain.setPhone(std.getPhoneNumber());
-            domain.setAddress(std.getAddress());
-            domain.setStartDate(std.getStartDate());
-            list.add(domain);
-        });
-        return list;
-    }
-
-    public Student convertDomainToEntity(StudentDomain domain) {
-        Student student = new Student();
-        student.setId(domain.getId());
-        student.setFirstName(domain.getFirstName());
-        student.setLastName(domain.getLastName());
-        student.setEmail(domain.getEmail());
-        student.setAddress(domain.getAddress());
-        student.setPhoneNumber(domain.getPhone());
-        student.setStartDate(domain.getStartDate());
-        return student;
+        return studentList;
     }
 }

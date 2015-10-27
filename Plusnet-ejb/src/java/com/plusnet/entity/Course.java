@@ -82,7 +82,8 @@ public class Course implements Serializable {
         this.id = id;
     }
 
-    public Course(Integer id, String courseName, String courseCode, String language, String courseLevel, String responsible) {
+    public Course(Integer id, String courseName, String courseCode, String language,
+                                        String courseLevel, String responsible) {
         this.id = id;
         this.courseName = courseName;
         this.courseCode = courseCode;
@@ -162,7 +163,8 @@ public class Course implements Serializable {
             return false;
         }
         Course other = (Course) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.id == null && other.id != null) || (this.id != null &&
+                !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -172,5 +174,4 @@ public class Course implements Serializable {
     public String toString() {
         return "com.plusnet.entity.Course[ id=" + id + " ]";
     }
-
 }

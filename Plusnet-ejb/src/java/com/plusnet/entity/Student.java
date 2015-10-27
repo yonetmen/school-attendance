@@ -59,7 +59,7 @@ public class Student implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 13, message = " (Mata in mellan 1-13 tecken)")
-    @Column(name = "PHONE_NUMBER")
+    @Column(name = "PHONE_NUMBER", unique = true)
     private String phoneNumber;
     
     @Basic(optional = false)
@@ -70,9 +70,9 @@ public class Student implements Serializable {
     
     @Email(message = " (Ogiltig email adress)")
     @Basic(optional = false)
-    @NotNull
+    @NotNull(message = " (Email finns i vårt system)")
     @Size(min = 1, max = 60, message = " (Mata in mellan 1-60 tecken)")
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", unique = true)
     private String email;
     
     @Basic(optional = false)
@@ -94,7 +94,8 @@ public class Student implements Serializable {
         this.id = id;
     }
 
-    public Student(Integer id, String firstName, String lastName, String phoneNumber, String address, String email, Date startDate) {
+    public Student(Integer id, String firstName, String lastName, 
+            String phoneNumber, String address, String email, Date startDate) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -192,15 +193,12 @@ public class Student implements Serializable {
             return false;
         }
         Student other = (Student) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null
+                && !this.id.equals(other.id)));
     }
 
     @Override
     public String toString() {
         return "com.plusnet.entity.Student[ id=" + id + " ]";
     }
-
 }

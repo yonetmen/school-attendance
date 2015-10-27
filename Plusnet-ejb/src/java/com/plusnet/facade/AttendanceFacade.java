@@ -1,6 +1,5 @@
 package com.plusnet.facade;
 
-import com.plusnet.domain.AttendanceDomain;
 import com.plusnet.entity.Attendance;
 import com.plusnet.entity.Student;
 import java.util.ArrayList;
@@ -43,16 +42,6 @@ public class AttendanceFacade extends AbstractFacade<Attendance> {
             studentIds.add(studentId);
         }
         return studentIds;
-    }
-
-    public void createAttendance(AttendanceDomain attendance) {
-        Attendance att = new Attendance();
-        att.setIsAttended(attendance.getAttended());
-        att.setRecordDate(attendance.getRecordDate());
-        att.setCourseName(attendance.getCourseName());
-        Student std = studentFacade.convertDomainToEntity(attendance.getStudentDomain());
-        att.setStudent(std);
-        em.persist(att);
     }
 
     public StudentFacade getStudentFacade() {

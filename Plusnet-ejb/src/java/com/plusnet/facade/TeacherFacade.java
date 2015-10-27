@@ -41,5 +41,4 @@ public class TeacherFacade extends AbstractFacade<Teacher> {
             return null;
         }
     }
-
 }

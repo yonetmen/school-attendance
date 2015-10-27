@@ -1,6 +1,6 @@
 package com.plusnet.managedbean;
 
-import com.plusnet.domain.JmsContent;
+import com.plusnet.mdb.JmsContent;
 import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;

@@ -18,22 +18,22 @@
                     <br/><p:outputLabel class="ui-state-default" style="font-size: 18px; padding: 5px;" value="Registrera ny student"/>
                     <br/>
                     <br/><h:outputText value="Förnamn" styleClass="form_label"/><h:message for="first_name" styleClass="error"/>
-                    <br><p:inputText style="margin: auto;" id="first_name" value="#{studentManagedBean.studentDomain.firstName}"/></br>
+                    <br><p:inputText style="margin: auto;" id="first_name" value="#{studentManagedBean.student.firstName}"/></br>
 
                     <h:outputText value="Efternamn" styleClass="form_label"/><h:message for="last_name" styleClass="error" />
-                    <br><p:inputText style="margin: auto;" id="last_name" value="#{studentManagedBean.studentDomain.lastName}"/></br>
+                    <br><p:inputText style="margin: auto;" id="last_name" value="#{studentManagedBean.student.lastName}"/></br>
 
                     <h:outputText value="Telefon" styleClass="form_label"/><h:message for="tel_number" styleClass="error" />
-                    <br><p:inputText style="margin: auto;" id="tel_number" value="#{studentManagedBean.studentDomain.phone}"/></br>
+                    <br><p:inputText style="margin: auto;" id="tel_number" value="#{studentManagedBean.student.phoneNumber}"/></br>
 
                     <h:outputText value="Adress" styleClass="form_label"/><h:message for="address" styleClass="error" />
-                    <br><p:inputText style="margin: auto;" id="address" value="#{studentManagedBean.studentDomain.address}"/></br>
+                    <br><p:inputText style="margin: auto;" id="address" value="#{studentManagedBean.student.address}"/></br>
 
                     <h:outputText value="Email" styleClass="form_label"/><h:message for="email" styleClass="error" />
-                    <br><p:inputText style="margin: auto;" id="email" value="#{studentManagedBean.studentDomain.email}"/></br>
+                    <br><p:inputText style="margin: auto;" id="email" value="#{studentManagedBean.student.email}"/></br>
 
                     <h:outputText value="Start Date" styleClass="form_label"/><h:message for="start_date" styleClass="error" /><br/>
-                    <p:calendar id="start_date" value="#{studentManagedBean.studentDomain.startDate}" pattern="dd-MM-yyyy" /><br/>
+                    <p:calendar id="start_date" value="#{studentManagedBean.student.startDate}" pattern="dd-MM-yyyy" /><br/>
 
                     <br><p:commandButton id="submit" value="Skapa Student" update="registerForm, :tableForm:dataTable"
                                          actionListener="#{studentManagedBean.createStudent()}"
@@ -45,36 +45,36 @@
             <p:layoutUnit id="layoutTable" position="center">
                 <h:form style="margin-left: 5px;" id="tableForm">
                     <p:dataTable id="dataTable" value="#{studentManagedBean.getStudents()}" 
-                                 var="stdDomain" >
+                                 var="std" >
 
                         <p:column>
                             <f:facet name="header">Förnamn</f:facet>
-                            <p:outputLabel value="#{stdDomain.firstName}"/>
+                            <p:outputLabel value="#{std.firstName}"/>
                         </p:column>
 
                         <p:column>
                             <f:facet name="header">Efternamn</f:facet>
-                            <p:outputLabel value="#{stdDomain.lastName}"/>
+                            <p:outputLabel value="#{std.lastName}"/>
                         </p:column>
 
                         <p:column style="width: 85px; text-align: center;">
                             <f:facet name="header">Telefon</f:facet>
-                            <p:outputLabel value="#{stdDomain.phone}"/>
+                            <p:outputLabel value="#{std.phoneNumber}"/>
                         </p:column>
 
                         <p:column style="width: 290px">
                             <f:facet name="header">Adress</f:facet>
-                            <p:outputLabel value="#{stdDomain.address}"/>
+                            <p:outputLabel value="#{std.address}"/>
                         </p:column>
 
                         <p:column style="width: 200px; text-align: center;">
                             <f:facet name="header">Email</f:facet>
-                            <p:outputLabel value="#{stdDomain.email}"/>
+                            <p:outputLabel value="#{std.email}"/>
                         </p:column>
 
                         <p:column style="width: 85px; text-align: center;">
                             <f:facet name="header">Registrerad</f:facet>
-                            <p:outputLabel  value="#{stdDomain.startDate}">
+                            <p:outputLabel  value="#{std.startDate}">
                                 <f:convertDateTime pattern="dd-MM-yyyy"/>
                             </p:outputLabel>
                         </p:column>
@@ -82,21 +82,21 @@
                         <p:column style="width: 25px">
                             <f:facet name="header">Info</f:facet>
                             <p:commandLink value="info" type="button" 
-                                           action="#{studentManagedBean.setStudentDomain(stdDomain)}"
+                                           action="#{studentManagedBean.setStudent(std)}"
                                            update=":info" oncomplete="PF('info').show();"/>
                         </p:column>
 
                         <p:column style="width: 25px">
                             <f:facet name="header">Edit</f:facet>
                             <p:commandLink value="edit" type="button" 
-                                           action="#{studentManagedBean.getDualListModelForStudent(stdDomain)}"
+                                           action="#{studentManagedBean.getDualListModelForStudent(std)}"
                                            update=":update" oncomplete="PF('update').show();"/>
                         </p:column>
 
                         <p:column style="width: 55px; text-align: center">
                             <f:facet name="header">Ta bort</f:facet>
                             <p:commandLink value="delete" update="@form" 
-                                           action="#{studentManagedBean.deleteStudent(stdDomain.id)}"/>
+                                           action="#{studentManagedBean.deleteStudent(std)}"/>
                         </p:column>
                     </p:dataTable>
                 </h:form>
@@ -106,27 +106,26 @@
             <p:dialog id="update" closable="false" header="Updatera Student" widgetVar="update" modal="true" width="490" height="100%" visible="#{facesContext.validationFailed}">
                 <h:form id="updateForm">                    
                     <h:outputText value="Förnamn" styleClass="form_label"/><h:message for="f_name" styleClass="error"/>
-                    <br><p:inputText style="margin: auto; width: 98%" id="f_name" value="#{studentManagedBean.studentDomain.firstName}"/></br>
+                    <br><p:inputText style="margin: auto; width: 98%" id="f_name" value="#{studentManagedBean.student.firstName}"/></br>
 
                     <h:outputText value="Efternamn" styleClass="form_label"/><h:message for="l_name" styleClass="error" />
-                    <br><p:inputText style="margin: auto; width: 98%" id="l_name" value="#{studentManagedBean.studentDomain.lastName}"/></br>
+                    <br><p:inputText style="margin: auto; width: 98%" id="l_name" value="#{studentManagedBean.student.lastName}"/></br>
 
                     <h:outputText value="Telefon" styleClass="form_label"/><h:message for="t_number" styleClass="error" />
-                    <br><p:inputText style="margin: auto; width: 98%" id="t_number" value="#{studentManagedBean.studentDomain.phone}"/></br>
+                    <br><p:inputText style="margin: auto; width: 98%" id="t_number" value="#{studentManagedBean.student.phoneNumber}"/></br>
 
                     <h:outputText value="Adress" styleClass="form_label"/><h:message for="addres" styleClass="error" />
-                    <br><p:inputText style="margin: auto; width: 98%" id="addres" value="#{studentManagedBean.studentDomain.address}"/></br>
+                    <br><p:inputText style="margin: auto; width: 98%" id="addres" value="#{studentManagedBean.student.address}"/></br>
 
                     <h:outputText value="Email" styleClass="form_label"/><h:message for="e-mail" styleClass="error" />
-                    <br><p:inputText style="margin: auto; width: 98%" id="e-mail" value="#{studentManagedBean.studentDomain.email}"/></br>
+                    <br><p:inputText style="margin: auto; width: 98%" id="e-mail" value="#{studentManagedBean.student.email}"/></br>
 
                     
-  <!-- TESTING -->  <!-- STUDENT'S COURSE LIST -->
+                    <!-- STUDENT'S COURSE LIST -->
                     <br/><h4 style="margin-top: 0">Students kurs List</h4>
                     
                     <p:pickList id="pickList" value="#{studentManagedBean.courses}" var="courses" itemLabel="#{courses}" itemValue="#{courses}" />
 
-                    
                     <p:dialog modal="true" showEffect="fade" hideEffect="fade" widgetVar="courseDialog">
                         <h:panelGrid id="displayCourses" columns="2">
                             <h:outputText value="Source: " style="font-weight:bold" />
@@ -148,7 +147,7 @@
                         
                     <p:commandButton id="updateButton" value="Updatera" update="displayCourses, :tableForm:dataTable"
                                      oncomplete="PF('courseDialog').show()"
-                                     action="#{studentManagedBean.editStudent()}"  style="width: 45%;  float: right;"
+                                     action="#{studentManagedBean.updateStudent()}"  style="width: 45%;  float: right;"
                                      onclick="if (args &amp; &amp; !args.validationFailed) editDialog.hide()" /></br>
                 </h:form>
             </p:dialog>
@@ -157,37 +156,35 @@
             <p:dialog id="info" closable="false" header="Student detaljer" widgetVar="info" modal="true" width="400" height="420">
                 <h:form id="infoForm">   
                     <h:outputText value="Förnamn" styleClass="form_label"/>
-                    <br><p:outputLabel class="info" id="f_name" value="#{studentManagedBean.studentDomain.firstName}"/></br>
+                    <br><p:outputLabel class="info" id="f_name" value="#{studentManagedBean.student.firstName}"/></br>
 
                     <h:outputText value="Efternamn" styleClass="form_label"/>
-                    <br><p:outputLabel class="info" id="l_name" value="#{studentManagedBean.studentDomain.lastName}"/></br>
+                    <br><p:outputLabel class="info" id="l_name" value="#{studentManagedBean.student.lastName}"/></br>
 
                     <h:outputText value="Telefon" styleClass="form_label"/>
-                    <br><p:outputLabel class="info" id="t_number" value="#{studentManagedBean.studentDomain.phone}"/></br>
+                    <br><p:outputLabel class="info" id="t_number" value="#{studentManagedBean.student.phoneNumber}"/></br>
 
                     <h:outputText value="Adress" styleClass="form_label"/>
-                    <br><p:outputLabel class="info" id="addres" value="#{studentManagedBean.studentDomain.address}"/></br>
+                    <br><p:outputLabel class="info" id="addres" value="#{studentManagedBean.student.address}"/></br>
 
                     <h:outputText value="Email" styleClass="form_label"/>
-                    <br><p:outputLabel class="info" id="e-mail" value="#{studentManagedBean.studentDomain.email}"/></br>
+                    <br><p:outputLabel class="info" id="e-mail" value="#{studentManagedBean.student.email}"/></br>
 
                     <h:outputText value="Start Date" styleClass="form_label"/><br/>
-                    <p:outputLabel class="info" id="startdate" value="#{studentManagedBean.studentDomain.startDate}">
+                    <p:outputLabel class="info" id="startdate" value="#{studentManagedBean.student.startDate}">
                         <f:convertDateTime pattern="yyyy-MM-dd"/>
                     </p:outputLabel><br/><br/>
                     
-                    <p:dataTable id="dataTable" value="#{studentManagedBean.getCourseListByStudentId(studentManagedBean.studentDomain.id)}" var="course">
-
+                    <p:dataTable id="dataTable" rendered="#{studentManagedBean.student.id != 0}" 
+                                 value="#{studentManagedBean.getCourseListByStudentId(studentManagedBean.student.id)}" var="course">
                         <p:column>
                             <f:facet name="header">Students Kurs Lista</f:facet>
                             <p:outputLabel value="#{course.courseName}"/>
                         </p:column>
-
                     </p:dataTable>
 
                     <br/><p:commandButton id="close" value="Stäng" style="width: 100%" onclick="info.hide()"
                                           action="#{studentManagedBean.closePopup()}" />
-
                 </h:form>
             </p:dialog>
         </p:layout>

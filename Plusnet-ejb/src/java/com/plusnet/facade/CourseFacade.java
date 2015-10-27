@@ -32,6 +32,7 @@ public class CourseFacade extends AbstractFacade<Course> {
         return query.setParameter("courseLanguage", language).getResultList().size();
     }
 
+    // This method is not exposed to users
     public String getMostPopulatedCourseName(String popularity) {
         Query query = em.createNativeQuery("SELECT c.COURSE_NAME "
                                             + "FROM student_has_course shc "
@@ -43,6 +44,7 @@ public class CourseFacade extends AbstractFacade<Course> {
         return result;
     }
 
+    // This method is not exposed to users
     public long getMostPopulatedCourseCount(String popularity) {
         Query query = em.createNativeQuery("SELECT count(*) AS counted "
                                             + "FROM student_has_course shc "
@@ -54,6 +56,7 @@ public class CourseFacade extends AbstractFacade<Course> {
         return result;
     }
     
+    // This method is not exposed to users
     public long getCourseCountByLevel(String level) {
         Query query = em.createNativeQuery("SELECT count(*) " +
                                             "FROM course AS c " +
